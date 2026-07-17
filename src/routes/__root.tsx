@@ -85,14 +85,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "AI-powered civic issue reporting for citizens, authorities and field workers. Report, verify, assign and resolve issues with real-time tracking.",
       },
       { name: "author", content: "CivicPulse" },
-      { property: "og:title", content: "CivicPulse AI" },
+      { property: "og:title", content: "CivicPulse AI — Intelligent Civic Issue Reporting" },
       {
         property: "og:description",
         content:
-          "Report civic issues, get AI classification, and track resolution in real time.",
+          "AI-powered civic issue reporting for citizens, authorities and field workers. Report, verify, assign and resolve issues with real-time tracking.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "CivicPulse AI — Intelligent Civic Issue Reporting" },
+      { name: "twitter:description", content: "AI-powered civic issue reporting for citizens, authorities and field workers. Report, verify, assign and resolve issues with real-time tracking." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6bed9829-902e-4408-b29d-39d604bc9889/id-preview-7d763c7d--ee0936cf-2bd7-4c02-8a9c-fb3a1609854a.lovable.app-1784303144536.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6bed9829-902e-4408-b29d-39d604bc9889/id-preview-7d763c7d--ee0936cf-2bd7-4c02-8a9c-fb3a1609854a.lovable.app-1784303144536.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
