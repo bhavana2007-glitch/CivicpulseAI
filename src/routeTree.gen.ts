@@ -9,38 +9,168 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkerRouteImport } from './routes/worker'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as CitizenRouteImport } from './routes/citizen'
+import { Route as AuthorityRouteImport } from './routes/authority'
+import { Route as AccessDeniedRouteImport } from './routes/access-denied'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRoleRegisterRouteImport } from './routes/auth.$role.register'
+import { Route as AuthRoleLoginRouteImport } from './routes/auth.$role.login'
 
+const WorkerRoute = WorkerRouteImport.update({
+  id: '/worker',
+  path: '/worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CitizenRoute = CitizenRouteImport.update({
+  id: '/citizen',
+  path: '/citizen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthorityRoute = AuthorityRouteImport.update({
+  id: '/authority',
+  path: '/authority',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessDeniedRoute = AccessDeniedRouteImport.update({
+  id: '/access-denied',
+  path: '/access-denied',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoleRegisterRoute = AuthRoleRegisterRouteImport.update({
+  id: '/auth/$role/register',
+  path: '/auth/$role/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoleLoginRoute = AuthRoleLoginRouteImport.update({
+  id: '/auth/$role/login',
+  path: '/auth/$role/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/access-denied': typeof AccessDeniedRoute
+  '/authority': typeof AuthorityRoute
+  '/citizen': typeof CitizenRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/worker': typeof WorkerRoute
+  '/auth/$role/login': typeof AuthRoleLoginRoute
+  '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/access-denied': typeof AccessDeniedRoute
+  '/authority': typeof AuthorityRoute
+  '/citizen': typeof CitizenRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/worker': typeof WorkerRoute
+  '/auth/$role/login': typeof AuthRoleLoginRoute
+  '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/access-denied': typeof AccessDeniedRoute
+  '/authority': typeof AuthorityRoute
+  '/citizen': typeof CitizenRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/worker': typeof WorkerRoute
+  '/auth/$role/login': typeof AuthRoleLoginRoute
+  '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/access-denied'
+    | '/authority'
+    | '/citizen'
+    | '/verify-email'
+    | '/worker'
+    | '/auth/$role/login'
+    | '/auth/$role/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/access-denied'
+    | '/authority'
+    | '/citizen'
+    | '/verify-email'
+    | '/worker'
+    | '/auth/$role/login'
+    | '/auth/$role/register'
+  id:
+    | '__root__'
+    | '/'
+    | '/access-denied'
+    | '/authority'
+    | '/citizen'
+    | '/verify-email'
+    | '/worker'
+    | '/auth/$role/login'
+    | '/auth/$role/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccessDeniedRoute: typeof AccessDeniedRoute
+  AuthorityRoute: typeof AuthorityRoute
+  CitizenRoute: typeof CitizenRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
+  WorkerRoute: typeof WorkerRoute
+  AuthRoleLoginRoute: typeof AuthRoleLoginRoute
+  AuthRoleRegisterRoute: typeof AuthRoleRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/worker': {
+      id: '/worker'
+      path: '/worker'
+      fullPath: '/worker'
+      preLoaderRoute: typeof WorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/citizen': {
+      id: '/citizen'
+      path: '/citizen'
+      fullPath: '/citizen'
+      preLoaderRoute: typeof CitizenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/authority': {
+      id: '/authority'
+      path: '/authority'
+      fullPath: '/authority'
+      preLoaderRoute: typeof AuthorityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/access-denied': {
+      id: '/access-denied'
+      path: '/access-denied'
+      fullPath: '/access-denied'
+      preLoaderRoute: typeof AccessDeniedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +178,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/$role/register': {
+      id: '/auth/$role/register'
+      path: '/auth/$role/register'
+      fullPath: '/auth/$role/register'
+      preLoaderRoute: typeof AuthRoleRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/$role/login': {
+      id: '/auth/$role/login'
+      path: '/auth/$role/login'
+      fullPath: '/auth/$role/login'
+      preLoaderRoute: typeof AuthRoleLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccessDeniedRoute: AccessDeniedRoute,
+  AuthorityRoute: AuthorityRoute,
+  CitizenRoute: CitizenRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
+  WorkerRoute: WorkerRoute,
+  AuthRoleLoginRoute: AuthRoleLoginRoute,
+  AuthRoleRegisterRoute: AuthRoleRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
