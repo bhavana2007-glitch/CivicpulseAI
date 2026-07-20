@@ -14,8 +14,12 @@ import { DashShell } from "@/components/DashShell";
 import { StatusStepper } from "@/components/StatusStepper";
 import { ComplaintMap } from "@/components/ComplaintMap";
 import { useAuth } from "@/lib/auth-context";
-import { subscribeComplaints, updateComplaint } from "@/lib/complaints";
-import type { Complaint } from "@/lib/types";
+import {
+  listUsersByRole,
+  subscribeComplaints,
+  updateComplaint,
+} from "@/lib/complaints";
+import type { Complaint, UserProfile } from "@/lib/types";
 import { STATUS_LABEL } from "@/lib/types";
 
 export const Route = createFileRoute("/authority")({
@@ -26,13 +30,15 @@ export const Route = createFileRoute("/authority")({
   ),
 });
 
-// Mock worker pool for assignment (in production: query users where role=worker)
-const WORKERS = [
+// Demo worker pool (used only if no real workers have registered yet)
+const DEMO_WORKERS = [
   { uid: "w_ravi", name: "Ravi K.", lat: 18.5204, lng: 73.8567 },
   { uid: "w_asha", name: "Asha M.", lat: 18.535, lng: 73.847 },
   { uid: "w_pratik", name: "Pratik S.", lat: 18.51, lng: 73.865 },
   { uid: "w_neha", name: "Neha D.", lat: 18.525, lng: 73.88 },
 ];
+
+type WorkerOpt = { uid: string; name: string; lat: number; lng: number; real?: boolean };
 
 function AuthorityDashboard() {
   const { user } = useAuth();
