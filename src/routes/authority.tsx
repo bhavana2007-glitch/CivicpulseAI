@@ -44,6 +44,7 @@ function AuthorityDashboard() {
   const { user } = useAuth();
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [filter, setFilter] = useState<string>("all");
+  const [workers, setWorkers] = useState<WorkerOpt[]>(DEMO_WORKERS);
 
   useEffect(() => {
     if (!user) return;
@@ -52,6 +53,29 @@ function AuthorityDashboard() {
       uid: user.uid,
     });
   }, [user]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      const real = await listUsersByRole("worker" as UserProfile["role"]);
+      if (cancelled) return;
+      const realOpts: WorkerOpt[] = real.map((u, i) => ({
+        uid: u.uid,
+        name: u.name,
+        lat: DEMO_WORKERS[i % DEMO_WORKERS.length].lat,
+        lng: DEMO_WORKERS[i % DEMO_WORKERS.length].lng,
+        real: true,
+      }));
+      setWorkers(realOpts.length ? [...realOpts, ...DEMO_WORKERS] : DEMO_WORKERS);
+    }
+    load();
+    const t = setInterval(load, 3000);
+    return () => {
+      cancelled = true;
+      clearInterval(t);
+    };
+  }, []);
+
 
   const stats = useMemo(() => {
     const byStatus = complaints.reduce<Record<string, number>>((a, c) => {
