@@ -117,6 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!firebaseConfigured) {
+      seedDemoUsers();
       // mock session
       const raw =
         typeof window !== "undefined"
