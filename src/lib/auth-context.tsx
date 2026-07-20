@@ -63,6 +63,48 @@ function writeMockUsers(u: MockUser[]) {
   localStorage.setItem(MOCK_USERS_KEY, JSON.stringify(u));
 }
 
+const DEMO_SEED: MockUser[] = [
+  {
+    uid: "demo_citizen",
+    email: "citizen@demo.com",
+    password: "demo1234",
+    name: "Demo Citizen",
+    role: "citizen",
+    emailVerified: true,
+  },
+  {
+    uid: "demo_authority",
+    email: "authority@demo.com",
+    password: "demo1234",
+    name: "Demo Authority",
+    role: "authority",
+    emailVerified: true,
+  },
+  {
+    uid: "demo_worker",
+    email: "worker@demo.com",
+    password: "demo1234",
+    name: "Demo Worker",
+    role: "worker",
+    emailVerified: true,
+  },
+];
+
+function seedDemoUsers() {
+  if (typeof window === "undefined") return;
+  const existing = readMockUsers();
+  const emails = new Set(existing.map((u) => u.email));
+  const merged = [...existing];
+  let added = false;
+  for (const d of DEMO_SEED) {
+    if (!emails.has(d.email)) {
+      merged.push(d);
+      added = true;
+    }
+  }
+  if (added) writeMockUsers(merged);
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
