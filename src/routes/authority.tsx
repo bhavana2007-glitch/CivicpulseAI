@@ -224,16 +224,16 @@ function Stat({
   );
 }
 
-function AuthorityRow({ c }: { c: Complaint }) {
+function AuthorityRow({ c, workers }: { c: Complaint; workers: WorkerOpt[] }) {
   const [busy, setBusy] = useState(false);
   const nearest = useMemo(() => {
-    return [...WORKERS]
+    return [...workers]
       .map((w) => ({
         w,
         d: (w.lat - c.lat) ** 2 + (w.lng - c.lng) ** 2,
       }))
       .sort((a, b) => a.d - b.d)[0].w;
-  }, [c.lat, c.lng]);
+  }, [c.lat, c.lng, workers]);
 
   async function assign(workerId: string, workerName: string) {
     setBusy(true);
