@@ -147,6 +147,12 @@ export async function updateComplaint(
 }
 
 // ---------- Users (workers list, etc) ----------
+interface MockUserRecord {
+  uid: string;
+  email: string;
+  name: string;
+  role: Role;
+}
 export async function listUsersByRole(role: Role): Promise<UserProfile[]> {
   if (firebaseConfigured) {
     const q = query(collection(db, "users"), where("role", "==", role));
@@ -154,5 +160,19 @@ export async function listUsersByRole(role: Role): Promise<UserProfile[]> {
     return snap.docs.map((d) => d.data() as UserProfile);
   }
   const users = lsRead<UserProfile[]>(LS_USERS, []);
-  return users.filter((u) => u.role === role);
+  // Also include mock-auth registered users (auth-context stores under civicpulse.mockusers)
+  const mock = lsRead<MockUserRecord[]>("civicpulse.mockusers", []);
+  const mockProfiles: UserProfile[] = mock
+    .filter((u) => u.role === role)
+    .map((u) => ({
+      uid: u.uid,
+      email: u.email,
+      name: u.name,
+      role: u.role,
+      createdAt: 0,
+    }));
+  const merged = [...users, ...mockProfiles].filter((u) => u.role === role);
+  // Dedupe by uid
+  const seen = new Set<string>();
+  return merged.filter((u) => (seen.has(u.uid) ? false : (seen.add(u.uid), true)));
 }

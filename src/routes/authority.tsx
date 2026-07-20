@@ -14,8 +14,12 @@ import { DashShell } from "@/components/DashShell";
 import { StatusStepper } from "@/components/StatusStepper";
 import { ComplaintMap } from "@/components/ComplaintMap";
 import { useAuth } from "@/lib/auth-context";
-import { subscribeComplaints, updateComplaint } from "@/lib/complaints";
-import type { Complaint } from "@/lib/types";
+import {
+  listUsersByRole,
+  subscribeComplaints,
+  updateComplaint,
+} from "@/lib/complaints";
+import type { Complaint, UserProfile } from "@/lib/types";
 import { STATUS_LABEL } from "@/lib/types";
 
 export const Route = createFileRoute("/authority")({
@@ -26,18 +30,21 @@ export const Route = createFileRoute("/authority")({
   ),
 });
 
-// Mock worker pool for assignment (in production: query users where role=worker)
-const WORKERS = [
+// Demo worker pool (used only if no real workers have registered yet)
+const DEMO_WORKERS = [
   { uid: "w_ravi", name: "Ravi K.", lat: 18.5204, lng: 73.8567 },
   { uid: "w_asha", name: "Asha M.", lat: 18.535, lng: 73.847 },
   { uid: "w_pratik", name: "Pratik S.", lat: 18.51, lng: 73.865 },
   { uid: "w_neha", name: "Neha D.", lat: 18.525, lng: 73.88 },
 ];
 
+type WorkerOpt = { uid: string; name: string; lat: number; lng: number; real?: boolean };
+
 function AuthorityDashboard() {
   const { user } = useAuth();
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [filter, setFilter] = useState<string>("all");
+  const [workers, setWorkers] = useState<WorkerOpt[]>(DEMO_WORKERS);
 
   useEffect(() => {
     if (!user) return;
@@ -46,6 +53,29 @@ function AuthorityDashboard() {
       uid: user.uid,
     });
   }, [user]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      const real = await listUsersByRole("worker" as UserProfile["role"]);
+      if (cancelled) return;
+      const realOpts: WorkerOpt[] = real.map((u, i) => ({
+        uid: u.uid,
+        name: u.name,
+        lat: DEMO_WORKERS[i % DEMO_WORKERS.length].lat,
+        lng: DEMO_WORKERS[i % DEMO_WORKERS.length].lng,
+        real: true,
+      }));
+      setWorkers(realOpts.length ? [...realOpts, ...DEMO_WORKERS] : DEMO_WORKERS);
+    }
+    load();
+    const t = setInterval(load, 3000);
+    return () => {
+      cancelled = true;
+      clearInterval(t);
+    };
+  }, []);
+
 
   const stats = useMemo(() => {
     const byStatus = complaints.reduce<Record<string, number>>((a, c) => {
@@ -159,7 +189,7 @@ function AuthorityDashboard() {
             </p>
           )}
           {filtered.map((c) => (
-            <AuthorityRow key={c.id} c={c} />
+            <AuthorityRow key={c.id} c={c} workers={workers} />
           ))}
         </div>
       </div>
@@ -194,16 +224,16 @@ function Stat({
   );
 }
 
-function AuthorityRow({ c }: { c: Complaint }) {
+function AuthorityRow({ c, workers }: { c: Complaint; workers: WorkerOpt[] }) {
   const [busy, setBusy] = useState(false);
   const nearest = useMemo(() => {
-    return [...WORKERS]
+    return [...workers]
       .map((w) => ({
         w,
         d: (w.lat - c.lat) ** 2 + (w.lng - c.lng) ** 2,
       }))
       .sort((a, b) => a.d - b.d)[0].w;
-  }, [c.lat, c.lng]);
+  }, [c.lat, c.lng, workers]);
 
   async function assign(workerId: string, workerName: string) {
     setBusy(true);
@@ -259,7 +289,7 @@ function AuthorityRow({ c }: { c: Complaint }) {
               </div>
               <select
                 onChange={(e) => {
-                  const w = WORKERS.find((x) => x.uid === e.target.value);
+                  const w = workers.find((x) => x.uid === e.target.value);
                   if (w) assign(w.uid, w.name);
                 }}
                 disabled={busy}
@@ -269,9 +299,10 @@ function AuthorityRow({ c }: { c: Complaint }) {
                 <option value="" disabled>
                   Assign worker…
                 </option>
-                {WORKERS.map((w) => (
+                {workers.map((w) => (
                   <option key={w.uid} value={w.uid}>
                     {w.name}
+                    {w.real ? " • live" : ""}
                     {w.uid === nearest.uid ? " ★ nearest" : ""}
                   </option>
                 ))}
