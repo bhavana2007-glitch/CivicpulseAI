@@ -289,7 +289,7 @@ function AuthorityRow({ c, workers }: { c: Complaint; workers: WorkerOpt[] }) {
               </div>
               <select
                 onChange={(e) => {
-                  const w = WORKERS.find((x) => x.uid === e.target.value);
+                  const w = workers.find((x) => x.uid === e.target.value);
                   if (w) assign(w.uid, w.name);
                 }}
                 disabled={busy}
@@ -299,9 +299,10 @@ function AuthorityRow({ c, workers }: { c: Complaint; workers: WorkerOpt[] }) {
                 <option value="" disabled>
                   Assign worker…
                 </option>
-                {WORKERS.map((w) => (
+                {workers.map((w) => (
                   <option key={w.uid} value={w.uid}>
                     {w.name}
+                    {w.real ? " • live" : ""}
                     {w.uid === nearest.uid ? " ★ nearest" : ""}
                   </option>
                 ))}
