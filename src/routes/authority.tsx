@@ -189,7 +189,7 @@ function AuthorityDashboard() {
             </p>
           )}
           {filtered.map((c) => (
-            <AuthorityRow key={c.id} c={c} />
+            <AuthorityRow key={c.id} c={c} workers={workers} />
           ))}
         </div>
       </div>
