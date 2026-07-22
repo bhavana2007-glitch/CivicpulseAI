@@ -1,178 +1,101 @@
 <div align="center">
 
 # 🌍 CivicPulse AI
+
 ### 🚀 AI-Powered Smart Civic Issue Reporting System
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&weight=600&size=24&duration=3000&pause=1000&color=0EA5E9&center=true&vCenter=true&width=700&lines=Report+Civic+Issues+Smarter;AI+Powered+Complaint+Detection;Real-Time+Complaint+Tracking;Building+Better+Cities+Together" />
+**Empowering citizens to report civic issues smarter, faster, and more efficiently using Artificial Intelligence.**
 
-<p align="center">
-<img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react"/>
-<img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black"/>
-<img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge"/>
-</p>
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Now-00C853?style=for-the-badge)](https://preview--connect-pulse-path.lovable.app/)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=for-the-badge\&logo=tailwindcss\&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge\&logo=firebase\&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge\&logo=vite\&logoColor=white)
 
----
+### 🌐 Live Website
 
-### 🌟 Making Cities Smarter with Artificial Intelligence
+### https://preview--connect-pulse-path.lovable.app/
 
-Citizens can report civic issues like potholes, garbage overflow, broken streetlights, drainage problems, water leaks, and more using AI-powered image recognition and real-time tracking.
+*"Building smarter cities through AI-powered civic engagement."*
 
 </div>
 
 ---
 
-# 📸 Project Preview
+# 📖 About the Project
 
-<p align="center">
+**CivicPulse AI** is an AI-powered Smart Civic Issue Reporting System that enables citizens to report public infrastructure issues such as potholes, garbage overflow, drainage problems, broken streetlights, water leaks, and power outages.
 
-| Home | Report Issue |
-|------|--------------|
-| <img src="images/home.png" width="400"> | <img src="images/report.png" width="400"> |
-
-| Dashboard | Tracking |
-|-----------|----------|
-| <img src="images/dashboard.png" width="400"> | <img src="images/tracking.png" width="400"> |
-
-</p>
+The platform uses Artificial Intelligence to classify reported issues, automatically records the user's location, and provides real-time complaint tracking from submission to completion. Authorities can efficiently manage complaints, assign field workers, and monitor progress through an intuitive dashboard.
 
 ---
 
-# ✨ Features
+# ✨ Key Features
 
-## 👨‍💼 Citizen
+## 👨‍💼 Citizen Portal
 
-- 📷 Upload issue images
-- 🤖 AI detects complaint category
-- 📍 Automatic GPS location
-- 📝 Add description
-- 🔔 Receive live notifications
-- 📊 Track complaint status
-- 🗺️ Interactive map view
+* 📷 Upload complaint images
+* 🤖 AI-powered issue detection
+* 📍 Automatic location capture
+* 📝 Complaint description
+* 🗺️ Interactive map
+* 📊 Live complaint tracking
+* 🔔 Status notifications
 
 ---
 
-## 🏛️ Authority
+## 🏛️ Authority Dashboard
 
-- 📋 Complaint dashboard
-- 👷 Assign workers
-- 📍 View issue locations
-- 📈 Analytics dashboard
-- 🚨 Priority based sorting
-- ✔️ Update complaint status
+* 📋 View all complaints
+* 👷 Assign field workers
+* 📍 Track issue locations
+* 📊 Complaint analytics
+* ⚡ Priority management
+* ✅ Update complaint status
 
 ---
 
 ## 👷 Field Worker
 
-- 📲 Receive assigned complaints
-- 🗺️ Navigation support
-- 📸 Upload completion proof
-- ✔️ Mark work completed
+* 📲 Receive assigned complaints
+* 🗺️ View issue location
+* 📸 Upload completion proof
+* ✔️ Mark work as completed
 
 ---
 
 # 🤖 AI Features
 
-✅ Image Classification
-
-✅ Automatic Complaint Category
-
-✅ Duplicate Complaint Detection
-
-✅ Smart Priority Prediction
-
-✅ AI Generated Description
+* 🧠 AI-based image classification
+* 🔍 Automatic complaint categorization
+* 🚨 Smart priority prediction
+* 📝 AI-assisted complaint description
+* 🔄 Duplicate complaint detection
 
 ---
 
-# 🛠 Tech Stack
+# 🛠️ Tech Stack
 
-## 🎨 Frontend
+## Frontend
 
-<p>
+* ⚛️ React.js
+* 📘 TypeScript
+* 🎨 Tailwind CSS
+* ⚡ Vite
 
-<img src="https://skillicons.dev/icons?i=react"/>
+## Backend
 
-<img src="https://skillicons.dev/icons?i=typescript"/>
+* 🔥 Firebase Authentication
+* 🔥 Firebase Firestore
+* ☁️ Firebase Storage
 
-<img src="https://skillicons.dev/icons?i=tailwind"/>
+## AI Technologies
 
-<img src="https://skillicons.dev/icons?i=vite"/>
-
-</p>
-
----
-
-## ⚙ Backend
-
-<p>
-
-<img src="https://skillicons.dev/icons?i=firebase"/>
-
-<img src="https://skillicons.dev/icons?i=nodejs"/>
-
-<img src="https://skillicons.dev/icons?i=express"/>
-
-</p>
-
----
-
-## 🤖 AI
-
-- 🧠 TensorFlow
-- 🤖 Google Vision API
-- 📷 Image Classification
-- 📝 NLP
-- 🧠 Machine Learning
-
----
-
-## 💾 Database
-
-<p>
-
-<img src="https://skillicons.dev/icons?i=firebase"/>
-
-</p>
-
-Firestore Database
-
-Firebase Storage
-
-Firebase Authentication
-
----
-
-# 🧩 System Workflow
-
-```text
-Citizen
-   │
-   ▼
-Upload Image
-   │
-   ▼
-AI Analysis
-   │
-   ▼
-Complaint Created
-   │
-   ▼
-Authority Dashboard
-   │
-Assign Worker
-   │
-   ▼
-Worker Visits
-   │
-   ▼
-Issue Fixed
-   │
-   ▼
-Citizen Notification
-```
+* 🤖 Machine Learning
+* 🧠 Computer Vision
+* 📷 Image Classification
+* 📝 Natural Language Processing (NLP)
 
 ---
 
@@ -185,12 +108,12 @@ CivicPulse-AI
 ├── src
 │   ├── assets
 │   ├── components
-│   ├── pages
-│   ├── hooks
 │   ├── context
-│   ├── firebase
-│   ├── services
+│   ├── hooks
+│   ├── pages
 │   ├── routes
+│   ├── services
+│   ├── firebase
 │   ├── utils
 │   └── App.tsx
 │
@@ -201,19 +124,58 @@ CivicPulse-AI
 
 ---
 
-# 🚀 Installation
+# 🔄 Workflow
+
+```
+Citizen
+   │
+   ▼
+Upload Image
+   │
+   ▼
+AI Detects Issue
+   │
+   ▼
+Complaint Submitted
+   │
+   ▼
+Authority Dashboard
+   │
+Assign Worker
+   │
+   ▼
+Worker Resolves Issue
+   │
+   ▼
+Status Updated
+   │
+   ▼
+Citizen Receives Notification
+```
+
+---
+
+# 🚀 Getting Started
+
+### Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/CivicPulse-AI.git
+git clone https://github.com/bhavana2007-glitch/CivicPulse-AI.git
 ```
+
+### Navigate to the Project
 
 ```bash
 cd CivicPulse-AI
 ```
 
+### Install Dependencies
+
 ```bash
 npm install
 ```
+
+### Run the Development Server
 
 ```bash
 npm run dev
@@ -221,108 +183,84 @@ npm run dev
 
 ---
 
-# 🔥 Future Enhancements
+# 🎯 Future Enhancements
 
-- 🌍 Multi-language Support
-- 🤖 Better AI Model
-- 📱 Mobile Application
-- 📊 Advanced Analytics
-- 🚔 Emergency Reporting
-- 📢 Push Notifications
-- 🛰 Satellite Monitoring
-- 🏙 Smart City Integration
-
----
-
-# 🎯 SDG Goals
-
-🌱 Sustainable Cities
-
-🚰 Clean Water
-
-🏛 Strong Institutions
-
-🤝 Community Participation
+* 🌐 Multi-language support
+* 📱 Android & iOS application
+* 🔔 Push notifications
+* 🤖 Improved AI accuracy
+* 📊 Advanced analytics dashboard
+* 🛰️ Smart city integration
+* 🚑 Emergency issue reporting
+* 📈 Predictive maintenance analytics
 
 ---
 
-# 📊 Project Stats
+# 🌱 Sustainable Development Goals (SDGs)
 
-| Feature | Status |
-|----------|--------|
-| Authentication | ✅ |
-| Complaint Reporting | ✅ |
-| AI Detection | ✅ |
-| Firebase | ✅ |
-| Dashboard | ✅ |
-| Live Tracking | ✅ |
-| Notifications | 🚧 |
+* 🏙️ Sustainable Cities and Communities
+* 🚰 Clean Water and Sanitation
+* 🏛️ Peace, Justice & Strong Institutions
+* 🤝 Community Participation
 
 ---
 
-# 👩‍💻 Contributors
+# 📊 Project Status
 
-<table>
-<tr>
+| Module               | Status         |
+| -------------------- | -------------- |
+| Authentication       | ✅ Completed    |
+| Complaint Reporting  | ✅ Completed    |
+| AI Detection         | ✅ Completed    |
+| Firebase Integration | ✅ Completed    |
+| Authority Dashboard  | ✅ Completed    |
+| Live Tracking        | ✅ Completed    |
 
-<td align="center">
-<img src="https://github.com/bhavana2007-glitch.png" width="120px"/>
-
-### Bhavana
-
-Frontend Developer
-
-AI Integration
-
-</td>
-
-<td align="center">
-<img src="https://github.com/sahana2007.png" width="120px"/>
-
-### Sahana
-
-Backend Developer
-
-Firebase
-
-</td>
-
-</tr>
-</table>
 
 ---
 
-# 🌐 Connect
+# 👩‍💻 Team
 
-<p align="center">
+### 👩 Bhavana
 
-<a href="https://github.com/YOUR_USERNAME">
-<img src="https://skillicons.dev/icons?i=github"/>
-</a>
+* Frontend Development
 
-<a href="#">
-<img src="https://skillicons.dev/icons?i=linkedin"/>
-</a>
+### 👩 JAISHREE
 
-<a href="#">
-<img src="https://skillicons.dev/icons?i=gmail"/>
-</a>
+* UI/UX Design
+* AI Integration
 
-</p>
+### 👩 Sahana
+
+* Backend Development
+  
+### 👨 SANJAY 
+
+* Firebase Integration
+  
+### 👨 LIWIN
+
+*  Database Management
 
 ---
 
-# ⭐ Support
+# 🌐 Live Demo
 
-If you like this project,
+🔗 https://preview--connect-pulse-path.lovable.app/
+
+---
+
+# 💙 Support
+
+If you found this project useful,
 
 ⭐ Star this repository
 
-🍴 Fork it
+🍴 Fork the project
 
-💡 Contribute
+💡 Share your feedback
 
-❤️ Build Better Cities Together
+🤝 Contributions are always welcome!
 
 ---
 
@@ -330,8 +268,9 @@ If you like this project,
 
 ## 🌍 CivicPulse AI
 
-### "Empowering Citizens. Enhancing Cities."
+### **Empowering Citizens • Enhancing Cities • Powered by AI**
 
-Made with ❤️ using React • Firebase • AI
+Made with ❤️ using React, TypeScript, Tailwind CSS, Firebase & Artificial Intelligence.
 
 </div>
+
