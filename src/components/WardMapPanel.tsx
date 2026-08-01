@@ -1,4 +1,4 @@
-import { Suspense, lazy, useMemo, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import type { Complaint, Category } from "@/lib/types";
 import { STATUS_FILTERS, STATUS_LEGEND } from "@/lib/map-status";
 
@@ -17,6 +17,8 @@ const CATEGORIES: (Category | "all")[] = [
 export function WardMapPanel({ complaints }: { complaints: Complaint[] }) {
   const [status, setStatus] = useState("all");
   const [category, setCategory] = useState<Category | "all">("all");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const visible = useMemo(() => {
     const f = STATUS_FILTERS.find((s) => s.key === status);
