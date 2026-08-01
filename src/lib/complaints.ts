@@ -117,6 +117,51 @@ export function subscribeComplaints(
   });
 }
 
+/**
+ * Public, unauthenticated live feed of ALL complaints (newest first).
+ * Consumers must strip citizen identity fields before rendering.
+ */
+export function subscribePublicComplaints(
+  cb: (list: Complaint[]) => void,
+): () => void {
+  const sort = (l: Complaint[]) =>
+    [...l].sort((a, b) => b.createdAt - a.createdAt);
+  if (!firebaseConfigured) {
+    const tick = () => cb(sort(lsRead<Complaint[]>(LS_KEY, [])));
+    tick();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === LS_KEY) tick();
+    };
+    window.addEventListener("storage", onStorage);
+    const int = setInterval(tick, 2000);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      clearInterval(int);
+    };
+  }
+  const q = query(collection(db, "complaints"), orderBy("createdAt", "desc"));
+  return onSnapshot(q, (snap) => {
+    const list: Complaint[] = snap.docs.map((d) => {
+      const raw = d.data() as Record<string, unknown>;
+      const createdAt = raw.createdAt;
+      const updatedAt = raw.updatedAt;
+      return {
+        ...(raw as unknown as Complaint),
+        id: d.id,
+        createdAt:
+          createdAt instanceof Timestamp
+            ? createdAt.toMillis()
+            : ((raw.createdAt as number) ?? Date.now()),
+        updatedAt:
+          updatedAt instanceof Timestamp
+            ? updatedAt.toMillis()
+            : ((raw.updatedAt as number) ?? Date.now()),
+      };
+    });
+    cb(sort(list));
+  });
+}
+
 function filterByRole(
   list: Complaint[],
   { role, uid }: { role: Role; uid: string },

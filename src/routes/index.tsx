@@ -33,13 +33,23 @@ function Landing() {
               </div>
             </div>
           </div>
-          <div className="font-mono text-[11px] uppercase tracking-widest text-cream/70">
-            {new Date().toLocaleDateString("en-IN", {
-              weekday: "short",
-              day: "numeric",
-              month: "short",
-            })}
+          <div className="flex items-center gap-4">
+            <Link
+              to="/feed"
+              className="flex items-center gap-2 rounded-full border border-amber/40 bg-amber/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-amber transition-colors hover:bg-amber/20"
+            >
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-moss" />
+              Live Civic Feed
+            </Link>
+            <div className="hidden font-mono text-[11px] uppercase tracking-widest text-cream/70 sm:block">
+              {new Date().toLocaleDateString("en-IN", {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+              })}
+            </div>
           </div>
+
         </div>
         {/* Ticker */}
         <div className="overflow-hidden border-t border-amber/30 bg-navy/95 py-2">
