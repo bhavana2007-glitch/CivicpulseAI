@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkerRouteImport } from './routes/worker'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as FeedRouteImport } from './routes/feed'
 import { Route as CitizenRouteImport } from './routes/citizen'
 import { Route as AuthorityRouteImport } from './routes/authority'
 import { Route as AccessDeniedRouteImport } from './routes/access-denied'
@@ -26,6 +27,11 @@ const WorkerRoute = WorkerRouteImport.update({
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CitizenRoute = CitizenRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/access-denied': typeof AccessDeniedRoute
   '/authority': typeof AuthorityRoute
   '/citizen': typeof CitizenRoute
+  '/feed': typeof FeedRoute
   '/verify-email': typeof VerifyEmailRoute
   '/worker': typeof WorkerRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/access-denied': typeof AccessDeniedRoute
   '/authority': typeof AuthorityRoute
   '/citizen': typeof CitizenRoute
+  '/feed': typeof FeedRoute
   '/verify-email': typeof VerifyEmailRoute
   '/worker': typeof WorkerRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/access-denied': typeof AccessDeniedRoute
   '/authority': typeof AuthorityRoute
   '/citizen': typeof CitizenRoute
+  '/feed': typeof FeedRoute
   '/verify-email': typeof VerifyEmailRoute
   '/worker': typeof WorkerRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/access-denied'
     | '/authority'
     | '/citizen'
+    | '/feed'
     | '/verify-email'
     | '/worker'
     | '/auth/$role/login'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/access-denied'
     | '/authority'
     | '/citizen'
+    | '/feed'
     | '/verify-email'
     | '/worker'
     | '/auth/$role/login'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/access-denied'
     | '/authority'
     | '/citizen'
+    | '/feed'
     | '/verify-email'
     | '/worker'
     | '/auth/$role/login'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AccessDeniedRoute: typeof AccessDeniedRoute
   AuthorityRoute: typeof AuthorityRoute
   CitizenRoute: typeof CitizenRoute
+  FeedRoute: typeof FeedRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   WorkerRoute: typeof WorkerRoute
   AuthRoleLoginRoute: typeof AuthRoleLoginRoute
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/verify-email'
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/citizen': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccessDeniedRoute: AccessDeniedRoute,
   AuthorityRoute: AuthorityRoute,
   CitizenRoute: CitizenRoute,
+  FeedRoute: FeedRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   WorkerRoute: WorkerRoute,
   AuthRoleLoginRoute: AuthRoleLoginRoute,
