@@ -77,7 +77,7 @@ export function WardMapPanel({ complaints }: { complaints: Complaint[] }) {
           </div>
         }
       >
-        <WardMap complaints={visible} height={420} />
+        {mounted && <WardMap complaints={visible} height={420} />}
       </Suspense>
 
       <div className="mt-3 flex flex-wrap gap-4">
