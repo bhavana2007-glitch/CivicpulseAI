@@ -12,7 +12,7 @@ import {
 import { RoleGuard } from "@/components/RoleGuard";
 import { DashShell } from "@/components/DashShell";
 import { StatusStepper } from "@/components/StatusStepper";
-import { ComplaintMap } from "@/components/ComplaintMap";
+import { WardMapPanel } from "@/components/WardMapPanel";
 import { useAuth } from "@/lib/auth-context";
 import {
   listUsersByRole,
