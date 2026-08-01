@@ -12,7 +12,7 @@ import {
 import { RoleGuard } from "@/components/RoleGuard";
 import { DashShell } from "@/components/DashShell";
 import { StatusStepper } from "@/components/StatusStepper";
-import { ComplaintMap } from "@/components/ComplaintMap";
+import { WardMapPanel } from "@/components/WardMapPanel";
 import { useAuth } from "@/lib/auth-context";
 import {
   listUsersByRole,
@@ -122,7 +122,7 @@ function AuthorityDashboard() {
         <Stat label="Resolved" value={stats.completed} accent="moss" />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid gap-6">
         <div className="bento">
           <h2 className="mb-3 font-display text-lg font-bold uppercase text-navy">
             Complaints by Category
@@ -145,13 +145,9 @@ function AuthorityDashboard() {
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="bento">
-          <h2 className="mb-3 font-display text-lg font-bold uppercase text-navy">
-            Ward Heatmap
-          </h2>
-          <ComplaintMap complaints={complaints} height={256} />
-        </div>
+        <WardMapPanel complaints={complaints} />
       </div>
+
 
       <div className="bento mt-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
