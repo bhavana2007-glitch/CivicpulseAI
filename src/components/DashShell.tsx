@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { NotificationBell } from "@/components/NotificationBell";
 import { useAuth } from "@/lib/auth-context";
 import type { Role } from "@/lib/types";
+
 
 export function DashShell({
   role,
