@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -13,7 +14,15 @@ import {
 } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { db, storage, firebaseConfigured } from "./firebase";
-import type { Complaint, ComplaintStatus, Role, UserProfile } from "./types";
+import { notifyComplaintEvent } from "./notifications";
+import type {
+  Complaint,
+  ComplaintStatus,
+  NotificationEvent,
+  Role,
+  UserProfile,
+} from "./types";
+
 
 // ---------- Local mock fallback (used until Firebase is configured) ----------
 const LS_KEY = "civicpulse.complaints";
