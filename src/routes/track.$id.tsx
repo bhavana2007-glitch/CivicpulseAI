@@ -91,7 +91,7 @@ function TrackPage() {
                   {c.category}
                 </div>
                 <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  {wardOf(c.lat, c.lng)} · {areaOf(c.lat, c.lng)} ·{" "}
+                  {wardOf(c)} · {areaOf(c)} ·{" "}
                   {new Date(c.createdAt).toLocaleString()}
                 </div>
               </div>
