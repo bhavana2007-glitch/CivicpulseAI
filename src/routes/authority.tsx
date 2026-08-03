@@ -247,6 +247,13 @@ function AuthorityRow({ c, workers }: { c: Complaint; workers: WorkerOpt[] }) {
     setBusy(false);
   }
 
+  async function reject() {
+    setBusy(true);
+    await updateComplaint(c.id, { status: "rejected" });
+    setBusy(false);
+  }
+
+
   return (
     <div className="rounded-lg border border-border bg-background/60 p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
