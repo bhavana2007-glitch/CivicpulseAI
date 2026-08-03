@@ -6,7 +6,8 @@ export type ComplaintStatus =
   | "assigned"
   | "en_route"
   | "in_progress"
-  | "completed";
+  | "completed"
+  | "rejected";
 
 export const STATUS_FLOW: ComplaintStatus[] = [
   "submitted",
@@ -24,7 +25,9 @@ export const STATUS_LABEL: Record<ComplaintStatus, string> = {
   en_route: "Worker En Route",
   in_progress: "Repair in Progress",
   completed: "Completed",
+  rejected: "Rejected",
 };
+
 
 export type Category =
   | "Pothole"
