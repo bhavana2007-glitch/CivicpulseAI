@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -13,7 +14,15 @@ import {
 } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { db, storage, firebaseConfigured } from "./firebase";
-import type { Complaint, ComplaintStatus, Role, UserProfile } from "./types";
+import { notifyComplaintEvent } from "./notifications";
+import type {
+  Complaint,
+  ComplaintStatus,
+  NotificationEvent,
+  Role,
+  UserProfile,
+} from "./types";
+
 
 // ---------- Local mock fallback (used until Firebase is configured) ----------
 const LS_KEY = "civicpulse.complaints";
@@ -44,6 +53,7 @@ export async function createComplaint(
     createdAt: now,
     updatedAt: now,
   };
+  let id: string;
   if (firebaseConfigured) {
     const docRef = await addDoc(collection(db, "complaints"), {
       ...base,
@@ -55,14 +65,25 @@ export async function createComplaint(
       status: "verified" as ComplaintStatus,
       updatedAt: serverTimestamp(),
     });
-    return docRef.id;
+    id = docRef.id;
+  } else {
+    id = `c_${now}_${Math.random().toString(36).slice(2, 8)}`;
+    const list = lsRead<Complaint[]>(LS_KEY, []);
+    list.unshift({ ...base, id, status: "verified" });
+    lsWrite(LS_KEY, list);
   }
-  const id = `c_${now}_${Math.random().toString(36).slice(2, 8)}`;
-  const list = lsRead<Complaint[]>(LS_KEY, []);
-  list.unshift({ ...base, id, status: "verified" });
-  lsWrite(LS_KEY, list);
+
+  const ref_ = {
+    id,
+    category: base.category,
+    citizenId: base.citizenId,
+    assignedWorkerId: base.assignedWorkerId,
+  };
+  await notifyComplaintEvent("submitted", { ...ref_, status: "submitted" });
+  await notifyComplaintEvent("verified", { ...ref_, status: "verified" });
   return id;
 }
+
 
 export async function uploadImage(
   path: string,
@@ -171,25 +192,89 @@ function filterByRole(
   return list;
 }
 
+const STATUS_EVENT: Partial<Record<ComplaintStatus, NotificationEvent>> = {
+  verified: "verified",
+  assigned: "assigned",
+  in_progress: "in_progress",
+  completed: "resolved",
+  rejected: "rejected",
+};
+
 export async function updateComplaint(
   id: string,
   patch: Partial<Complaint>,
 ): Promise<void> {
   const updatedAt = Date.now();
+  let after: Complaint | null = null;
+  let prevStatus: ComplaintStatus | undefined;
+
   if (firebaseConfigured) {
+    const snap = await getDoc(doc(db, "complaints", id));
+    const prev = snap.exists() ? (snap.data() as Complaint) : null;
+    prevStatus = prev?.status;
     await updateDoc(doc(db, "complaints", id), {
       ...patch,
       updatedAt: serverTimestamp(),
     });
-    return;
+    if (prev) after = { ...prev, ...patch, id };
+  } else {
+    const list = lsRead<Complaint[]>(LS_KEY, []);
+    const idx = list.findIndex((c) => c.id === id);
+    if (idx >= 0) {
+      prevStatus = list[idx].status;
+      list[idx] = { ...list[idx], ...patch, updatedAt };
+      lsWrite(LS_KEY, list);
+      after = list[idx];
+    }
   }
-  const list = lsRead<Complaint[]>(LS_KEY, []);
-  const idx = list.findIndex((c) => c.id === id);
-  if (idx >= 0) {
-    list[idx] = { ...list[idx], ...patch, updatedAt };
-    lsWrite(LS_KEY, list);
+
+  const event =
+    patch.status && patch.status !== prevStatus
+      ? STATUS_EVENT[patch.status]
+      : undefined;
+  if (event && after) {
+    await notifyComplaintEvent(event, {
+      id,
+      category: after.category,
+      status: after.status,
+      citizenId: after.citizenId,
+      assignedWorkerId: after.assignedWorkerId,
+    });
   }
 }
+
+/** Live single-complaint stream used by the tracking page. */
+export function subscribeComplaint(
+  id: string,
+  cb: (c: Complaint | null) => void,
+): () => void {
+  if (!firebaseConfigured) {
+    const tick = () =>
+      cb(lsRead<Complaint[]>(LS_KEY, []).find((c) => c.id === id) ?? null);
+    tick();
+    const int = setInterval(tick, 1500);
+    return () => clearInterval(int);
+  }
+  return onSnapshot(doc(db, "complaints", id), (snap) => {
+    if (!snap.exists()) return cb(null);
+    const raw = snap.data() as Record<string, unknown>;
+    const createdAt = raw.createdAt;
+    const updatedAt = raw.updatedAt;
+    cb({
+      ...(raw as unknown as Complaint),
+      id: snap.id,
+      createdAt:
+        createdAt instanceof Timestamp
+          ? createdAt.toMillis()
+          : ((createdAt as number) ?? Date.now()),
+      updatedAt:
+        updatedAt instanceof Timestamp
+          ? updatedAt.toMillis()
+          : ((updatedAt as number) ?? Date.now()),
+    });
+  });
+}
+
 
 // ---------- Users (workers list, etc) ----------
 interface MockUserRecord {

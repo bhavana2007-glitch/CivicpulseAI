@@ -6,7 +6,8 @@ export type ComplaintStatus =
   | "assigned"
   | "en_route"
   | "in_progress"
-  | "completed";
+  | "completed"
+  | "rejected";
 
 export const STATUS_FLOW: ComplaintStatus[] = [
   "submitted",
@@ -24,7 +25,9 @@ export const STATUS_LABEL: Record<ComplaintStatus, string> = {
   en_route: "Worker En Route",
   in_progress: "Repair in Progress",
   completed: "Completed",
+  rejected: "Rejected",
 };
+
 
 export type Category =
   | "Pothole"
@@ -65,3 +68,27 @@ export interface Complaint {
   proofUrl?: string;
   feedback?: { rating: number; comment: string };
 }
+
+/** Lifecycle events that generate notifications. */
+export type NotificationEvent =
+  | "submitted"
+  | "verified"
+  | "assigned"
+  | "in_progress"
+  | "resolved"
+  | "rejected";
+
+export interface AppNotification {
+  id: string;
+  /** Recipient uid. */
+  userId: string;
+  event: NotificationEvent;
+  title: string;
+  message: string;
+  complaintId: string;
+  category: Category;
+  status: ComplaintStatus;
+  read: boolean;
+  createdAt: number;
+}
+
