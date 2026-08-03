@@ -243,6 +243,38 @@ export async function updateComplaint(
   }
 }
 
+/** Live single-complaint stream used by the tracking page. */
+export function subscribeComplaint(
+  id: string,
+  cb: (c: Complaint | null) => void,
+): () => void {
+  if (!firebaseConfigured) {
+    const tick = () =>
+      cb(lsRead<Complaint[]>(LS_KEY, []).find((c) => c.id === id) ?? null);
+    tick();
+    const int = setInterval(tick, 1500);
+    return () => clearInterval(int);
+  }
+  return onSnapshot(doc(db, "complaints", id), (snap) => {
+    if (!snap.exists()) return cb(null);
+    const raw = snap.data() as Record<string, unknown>;
+    const createdAt = raw.createdAt;
+    const updatedAt = raw.updatedAt;
+    cb({
+      ...(raw as unknown as Complaint),
+      id: snap.id,
+      createdAt:
+        createdAt instanceof Timestamp
+          ? createdAt.toMillis()
+          : ((createdAt as number) ?? Date.now()),
+      updatedAt:
+        updatedAt instanceof Timestamp
+          ? updatedAt.toMillis()
+          : ((updatedAt as number) ?? Date.now()),
+    });
+  });
+}
+
 
 // ---------- Users (workers list, etc) ----------
 interface MockUserRecord {
