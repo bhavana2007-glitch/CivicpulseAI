@@ -43,6 +43,7 @@ export function DashShell({
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <NotificationBell />
             <div className="hidden text-right md:block">
               <div className="font-mono text-[10px] uppercase tracking-widest text-cream/60">
                 {profile?.role}
@@ -50,6 +51,7 @@ export function DashShell({
               <div className="text-sm">{profile?.name ?? profile?.email}</div>
             </div>
             <div
+
               className={`grid h-9 w-9 place-items-center rounded-full ${accent} ${accentFg} font-display font-bold`}
             >
               {(profile?.name ?? profile?.email ?? "?").charAt(0).toUpperCase()}
