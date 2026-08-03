@@ -192,25 +192,57 @@ function filterByRole(
   return list;
 }
 
+const STATUS_EVENT: Partial<Record<ComplaintStatus, NotificationEvent>> = {
+  verified: "verified",
+  assigned: "assigned",
+  in_progress: "in_progress",
+  completed: "resolved",
+  rejected: "rejected",
+};
+
 export async function updateComplaint(
   id: string,
   patch: Partial<Complaint>,
 ): Promise<void> {
   const updatedAt = Date.now();
+  let after: Complaint | null = null;
+  let prevStatus: ComplaintStatus | undefined;
+
   if (firebaseConfigured) {
+    const snap = await getDoc(doc(db, "complaints", id));
+    const prev = snap.exists() ? (snap.data() as Complaint) : null;
+    prevStatus = prev?.status;
     await updateDoc(doc(db, "complaints", id), {
       ...patch,
       updatedAt: serverTimestamp(),
     });
-    return;
+    if (prev) after = { ...prev, ...patch, id };
+  } else {
+    const list = lsRead<Complaint[]>(LS_KEY, []);
+    const idx = list.findIndex((c) => c.id === id);
+    if (idx >= 0) {
+      prevStatus = list[idx].status;
+      list[idx] = { ...list[idx], ...patch, updatedAt };
+      lsWrite(LS_KEY, list);
+      after = list[idx];
+    }
   }
-  const list = lsRead<Complaint[]>(LS_KEY, []);
-  const idx = list.findIndex((c) => c.id === id);
-  if (idx >= 0) {
-    list[idx] = { ...list[idx], ...patch, updatedAt };
-    lsWrite(LS_KEY, list);
+
+  const event =
+    patch.status && patch.status !== prevStatus
+      ? STATUS_EVENT[patch.status]
+      : undefined;
+  if (event && after) {
+    await notifyComplaintEvent(event, {
+      id,
+      category: after.category,
+      status: after.status,
+      citizenId: after.citizenId,
+      assignedWorkerId: after.assignedWorkerId,
+    });
   }
 }
+
 
 // ---------- Users (workers list, etc) ----------
 interface MockUserRecord {
