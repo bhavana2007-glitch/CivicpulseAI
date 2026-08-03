@@ -68,3 +68,27 @@ export interface Complaint {
   proofUrl?: string;
   feedback?: { rating: number; comment: string };
 }
+
+/** Lifecycle events that generate notifications. */
+export type NotificationEvent =
+  | "submitted"
+  | "verified"
+  | "assigned"
+  | "in_progress"
+  | "resolved"
+  | "rejected";
+
+export interface AppNotification {
+  id: string;
+  /** Recipient uid. */
+  userId: string;
+  event: NotificationEvent;
+  title: string;
+  message: string;
+  complaintId: string;
+  category: Category;
+  status: ComplaintStatus;
+  read: boolean;
+  createdAt: number;
+}
+
