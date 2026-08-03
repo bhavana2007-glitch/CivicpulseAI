@@ -312,25 +312,42 @@ function AuthorityRow({ c, workers }: { c: Complaint; workers: WorkerOpt[] }) {
               </select>
             </>
           )}
-          {c.assignedWorkerId && c.status !== "completed" && (
-            <>
-              <div className="font-mono text-[10px] uppercase text-moss">
-                Assigned: {c.assignedWorkerName}
-              </div>
-              <button
-                onClick={close}
-                disabled={busy}
-                className="rounded bg-moss px-3 py-1.5 font-mono text-[10px] uppercase text-cream hover:opacity-90"
-              >
-                Close complaint
-              </button>
-            </>
+          {c.assignedWorkerId &&
+            c.status !== "completed" &&
+            c.status !== "rejected" && (
+              <>
+                <div className="font-mono text-[10px] uppercase text-moss">
+                  Assigned: {c.assignedWorkerName}
+                </div>
+                <button
+                  onClick={close}
+                  disabled={busy}
+                  className="rounded bg-moss px-3 py-1.5 font-mono text-[10px] uppercase text-cream hover:opacity-90"
+                >
+                  Close complaint
+                </button>
+              </>
+            )}
+          {c.status !== "completed" && c.status !== "rejected" && (
+            <button
+              onClick={reject}
+              disabled={busy}
+              className="rounded border border-destructive px-3 py-1.5 font-mono text-[10px] uppercase text-destructive hover:bg-destructive/10"
+            >
+              Reject complaint
+            </button>
           )}
           {c.status === "completed" && (
             <div className="rounded bg-moss/20 px-2 py-1 font-mono text-[10px] uppercase text-moss">
               ✓ Resolved
             </div>
           )}
+          {c.status === "rejected" && (
+            <div className="rounded bg-destructive/15 px-2 py-1 font-mono text-[10px] uppercase text-destructive">
+              ✕ Rejected
+            </div>
+          )}
+
         </div>
       </div>
       <div className="mt-3">
