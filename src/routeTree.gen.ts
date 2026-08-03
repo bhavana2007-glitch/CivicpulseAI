@@ -16,6 +16,7 @@ import { Route as CitizenRouteImport } from './routes/citizen'
 import { Route as AuthorityRouteImport } from './routes/authority'
 import { Route as AccessDeniedRouteImport } from './routes/access-denied'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TrackIdRouteImport } from './routes/track.$id'
 import { Route as AuthRoleRegisterRouteImport } from './routes/auth.$role.register'
 import { Route as AuthRoleLoginRouteImport } from './routes/auth.$role.login'
 
@@ -54,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrackIdRoute = TrackIdRouteImport.update({
+  id: '/track/$id',
+  path: '/track/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoleRegisterRoute = AuthRoleRegisterRouteImport.update({
   id: '/auth/$role/register',
   path: '/auth/$role/register',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/feed': typeof FeedRoute
   '/verify-email': typeof VerifyEmailRoute
   '/worker': typeof WorkerRoute
+  '/track/$id': typeof TrackIdRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
   '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/feed': typeof FeedRoute
   '/verify-email': typeof VerifyEmailRoute
   '/worker': typeof WorkerRoute
+  '/track/$id': typeof TrackIdRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
   '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/feed': typeof FeedRoute
   '/verify-email': typeof VerifyEmailRoute
   '/worker': typeof WorkerRoute
+  '/track/$id': typeof TrackIdRoute
   '/auth/$role/login': typeof AuthRoleLoginRoute
   '/auth/$role/register': typeof AuthRoleRegisterRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/verify-email'
     | '/worker'
+    | '/track/$id'
     | '/auth/$role/login'
     | '/auth/$role/register'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/verify-email'
     | '/worker'
+    | '/track/$id'
     | '/auth/$role/login'
     | '/auth/$role/register'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/verify-email'
     | '/worker'
+    | '/track/$id'
     | '/auth/$role/login'
     | '/auth/$role/register'
   fileRoutesById: FileRoutesById
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   FeedRoute: typeof FeedRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   WorkerRoute: typeof WorkerRoute
+  TrackIdRoute: typeof TrackIdRoute
   AuthRoleLoginRoute: typeof AuthRoleLoginRoute
   AuthRoleRegisterRoute: typeof AuthRoleRegisterRoute
 }
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/track/$id': {
+      id: '/track/$id'
+      path: '/track/$id'
+      fullPath: '/track/$id'
+      preLoaderRoute: typeof TrackIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/$role/register': {
       id: '/auth/$role/register'
       path: '/auth/$role/register'
@@ -223,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeedRoute: FeedRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   WorkerRoute: WorkerRoute,
+  TrackIdRoute: TrackIdRoute,
   AuthRoleLoginRoute: AuthRoleLoginRoute,
   AuthRoleRegisterRoute: AuthRoleRegisterRoute,
 }
