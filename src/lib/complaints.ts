@@ -53,6 +53,7 @@ export async function createComplaint(
     createdAt: now,
     updatedAt: now,
   };
+  let id: string;
   if (firebaseConfigured) {
     const docRef = await addDoc(collection(db, "complaints"), {
       ...base,
@@ -64,14 +65,25 @@ export async function createComplaint(
       status: "verified" as ComplaintStatus,
       updatedAt: serverTimestamp(),
     });
-    return docRef.id;
+    id = docRef.id;
+  } else {
+    id = `c_${now}_${Math.random().toString(36).slice(2, 8)}`;
+    const list = lsRead<Complaint[]>(LS_KEY, []);
+    list.unshift({ ...base, id, status: "verified" });
+    lsWrite(LS_KEY, list);
   }
-  const id = `c_${now}_${Math.random().toString(36).slice(2, 8)}`;
-  const list = lsRead<Complaint[]>(LS_KEY, []);
-  list.unshift({ ...base, id, status: "verified" });
-  lsWrite(LS_KEY, list);
+
+  const ref_ = {
+    id,
+    category: base.category,
+    citizenId: base.citizenId,
+    assignedWorkerId: base.assignedWorkerId,
+  };
+  await notifyComplaintEvent("submitted", { ...ref_, status: "submitted" });
+  await notifyComplaintEvent("verified", { ...ref_, status: "verified" });
   return id;
 }
+
 
 export async function uploadImage(
   path: string,
