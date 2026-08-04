@@ -105,7 +105,7 @@ export const classifyImage = createServerFn({ method: "POST" })
                 type: "text",
                 text: "Classify this civic issue image. Return only the JSON object.",
               },
-              { type: "image", image: new URL(data.imageDataUrl) },
+              { type: "image", image: data.imageDataUrl },
             ],
           },
         ],
