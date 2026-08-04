@@ -85,31 +85,47 @@ export const classifyImage = createServerFn({ method: "POST" })
       isValid: true,
       source: "fallback",
     };
-    if (!key) return fallback;
-
-    const { generateText } = await import("ai");
-    const { createLovableAiGatewayProvider } = await import(
-      "./ai-gateway.server"
-    );
-    const gateway = createLovableAiGatewayProvider(key);
+    if (!key) return { ...fallback, error: "missing LOVABLE_API_KEY" };
 
     try {
-      const { text } = await generateText({
-        model: gateway("google/gemini-3.6-flash"),
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: "Classify this civic issue image. Return only the JSON object.",
-              },
-              { type: "image", image: data.imageDataUrl },
-            ],
+      const res = await fetch(
+        "https://ai.gateway.lovable.dev/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Lovable-API-Key": key,
+            "Content-Type": "application/json",
           },
-        ],
-      });
+          body: JSON.stringify({
+            model: "google/gemini-3.6-flash",
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              {
+                role: "user",
+                content: [
+                  {
+                    type: "text",
+                    text: "Classify this civic issue image. Return only the JSON object.",
+                  },
+                  {
+                    type: "image_url",
+                    image_url: { url: data.imageDataUrl },
+                  },
+                ],
+              },
+            ],
+          }),
+        },
+      );
+      if (!res.ok) {
+        const body = await res.text();
+        console.error("AI gateway error", res.status, body.slice(0, 300));
+        return { ...fallback, error: `gateway ${res.status}` };
+      }
+      const json = (await res.json()) as {
+        choices?: { message?: { content?: string } }[];
+      };
+      const text = json.choices?.[0]?.message?.content ?? "";
 
       const raw = parseJson(text);
       const confidence = normalizeConfidence(raw["confidence"]);
