@@ -29,13 +29,18 @@ export const STATUS_LABEL: Record<ComplaintStatus, string> = {
 };
 
 
+/** The ONLY approved civic issue categories. */
 export type Category =
   | "Pothole"
-  | "Garbage"
+  | "Water Logging"
   | "Water Leak"
-  | "Streetlight"
-  | "Parking"
-  | "Other";
+  | "Drainage Issue"
+  | "Garbage Overflow"
+  | "Broken Streetlight"
+  | "Power Outage"
+  | "Fallen Tree"
+  | "Road Damage"
+  | "Others";
 
 export type Priority = "low" | "medium" | "high" | "critical";
 

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { CATEGORIES as CATEGORY_LIST } from "@/lib/categories";
 import { useEffect, useMemo, useState } from "react";
 import { StatusStepper } from "@/components/StatusStepper";
 import { subscribePublicComplaints } from "@/lib/complaints";
@@ -27,15 +28,7 @@ export const Route = createFileRoute("/feed")({
   component: PublicFeed,
 });
 
-const CATEGORIES: (Category | "all")[] = [
-  "all",
-  "Pothole",
-  "Garbage",
-  "Water Leak",
-  "Streetlight",
-  "Parking",
-  "Other",
-];
+const CATEGORIES: (Category | "all")[] = ["all", ...CATEGORY_LIST];
 
 const STATUSES: (ComplaintStatus | "all")[] = [
   "all",
