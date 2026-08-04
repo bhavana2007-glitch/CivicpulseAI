@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { CATEGORIES as CATEGORY_LIST } from "@/lib/categories";
 import { useEffect, useMemo, useState } from "react";
 import { StatusStepper } from "@/components/StatusStepper";
 import { subscribePublicComplaints } from "@/lib/complaints";

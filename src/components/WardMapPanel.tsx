@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
+import { CATEGORIES as CATEGORY_LIST } from "@/lib/categories";
 import type { Complaint, Category } from "@/lib/types";
 import { STATUS_FILTERS, STATUS_LEGEND } from "@/lib/map-status";
 
