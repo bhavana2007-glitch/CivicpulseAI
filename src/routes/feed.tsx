@@ -27,15 +27,7 @@ export const Route = createFileRoute("/feed")({
   component: PublicFeed,
 });
 
-const CATEGORIES: (Category | "all")[] = [
-  "all",
-  "Pothole",
-  "Garbage",
-  "Water Leak",
-  "Streetlight",
-  "Parking",
-  "Other",
-];
+const CATEGORIES: (Category | "all")[] = ["all", ...CATEGORY_LIST];
 
 const STATUSES: (ComplaintStatus | "all")[] = [
   "all",

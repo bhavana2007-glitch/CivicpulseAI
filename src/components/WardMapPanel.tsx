@@ -4,15 +4,7 @@ import { STATUS_FILTERS, STATUS_LEGEND } from "@/lib/map-status";
 
 const WardMap = lazy(() => import("./WardMap"));
 
-const CATEGORIES: (Category | "all")[] = [
-  "all",
-  "Pothole",
-  "Garbage",
-  "Water Leak",
-  "Streetlight",
-  "Parking",
-  "Other",
-];
+const CATEGORIES: (Category | "all")[] = ["all", ...CATEGORY_LIST];
 
 export function WardMapPanel({ complaints }: { complaints: Complaint[] }) {
   const [status, setStatus] = useState("all");
