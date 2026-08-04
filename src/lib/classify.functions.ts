@@ -20,6 +20,8 @@ export interface ClassificationResult {
   confidence: number;
   isValid: boolean;
   source: "ai" | "fallback";
+  /** Populated only when classification failed. */
+  error?: string;
 }
 
 const SYSTEM_PROMPT = `You are an AI-powered civic issue classifier.
@@ -149,6 +151,6 @@ export const classifyImage = createServerFn({ method: "POST" })
       };
     } catch (err) {
       console.error("classifyImage failed", err);
-      return fallback;
+      return { ...fallback, error: String(err).slice(0, 200) };
     }
   });
