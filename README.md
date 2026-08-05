@@ -6,7 +6,7 @@
 
 **Empowering citizens to report civic issues smarter, faster, and more efficiently using Artificial Intelligence.**
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Now-00C853?style=for-the-badge)](https://preview--connect-pulse-path.lovable.app/)
+[![Live Demo]https://civicpulse-ai-path.vercel.app/
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=for-the-badge\&logo=tailwindcss\&logoColor=white)
@@ -15,7 +15,7 @@
 
 ### 🌐 Live Website
 
-### https://preview--connect-pulse-path.lovable.app/
+### https://civicpulse-ai-path.vercel.app/
 
 *"Building smarter cities through AI-powered civic engagement."*
 
