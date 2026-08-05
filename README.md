@@ -246,7 +246,7 @@ npm run dev
 
 # 🌐 Live Demo
 
-🔗 https://preview--connect-pulse-path.lovable.app/
+🔗 https://civicpulse-ai-path.vercel.app/
 
 ---
 
