@@ -1,6 +1,8 @@
-import { STATUS_FLOW, STATUS_LABEL, type ComplaintStatus } from "@/lib/types";
+import { STATUS_FLOW, type ComplaintStatus } from "@/lib/types";
+import { useLabels } from "@/lib/i18n/labels";
 
 export function StatusStepper({ status }: { status: ComplaintStatus }) {
+  const { status: statusLabel } = useLabels();
   const currentIdx = STATUS_FLOW.indexOf(status);
   return (
     <div className="flex flex-wrap items-center gap-1.5">
@@ -21,7 +23,7 @@ export function StatusStepper({ status }: { status: ComplaintStatus }) {
               <span
                 className={`h-1.5 w-1.5 rounded-full ${current ? "bg-navy animate-pulse" : active ? "bg-moss" : "bg-border"}`}
               />
-              {STATUS_LABEL[s]}
+              {statusLabel(s)}
             </div>
             {i < STATUS_FLOW.length - 1 && (
               <div

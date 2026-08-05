@@ -1,20 +1,15 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { firebaseConfigured } from "@/lib/firebase";
 
 export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const TICKER = [
-  "▲ WARD 7 — 4 potholes resolved in 24h",
-  "● WARD 12 — garbage overflow flagged critical",
-  "◆ WARD 3 — water leak in progress, worker en route",
-  "■ WARD 21 — streetlight repaired · 42 min turnaround",
-  "▲ WARD 9 — new complaint verified by AI",
-  "● WARD 5 — parking violation dispatched to traffic dept",
-];
-
 function Landing() {
+  const { t } = useTranslation();
+  const ticker = t("landing.ticker", { returnObjects: true }) as string[];
   return (
     <div className="min-h-screen">
       {/* Signage header */}
@@ -26,20 +21,21 @@ function Landing() {
             </div>
             <div>
               <div className="font-display text-xl font-bold uppercase tracking-widest">
-                CivicPulse
+                {t("common.appName")}
               </div>
               <div className="font-mono text-[10px] uppercase tracking-wider text-amber">
-                AI · Civic Terminal · v1.0
+                {t("common.tagline")}
               </div>
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <LanguageSelector />
             <Link
               to="/feed"
               className="flex items-center gap-2 rounded-full border border-amber/40 bg-amber/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-amber transition-colors hover:bg-amber/20"
             >
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-moss" />
-              Live Civic Feed
+              {t("common.liveFeed")}
             </Link>
             <div className="hidden font-mono text-[11px] uppercase tracking-widest text-cream/70 sm:block">
               {new Date().toLocaleDateString("en-IN", {
@@ -54,9 +50,9 @@ function Landing() {
         {/* Ticker */}
         <div className="overflow-hidden border-t border-amber/30 bg-navy/95 py-2">
           <div className="ticker flex whitespace-nowrap font-mono text-xs text-amber">
-            {[...TICKER, ...TICKER].map((t, i) => (
+            {[...ticker, ...ticker].map((s, i) => (
               <span key={i} className="mx-8">
-                {t}
+                {s}
               </span>
             ))}
           </div>
@@ -66,74 +62,55 @@ function Landing() {
       <main className="mx-auto max-w-7xl px-6 py-12">
         <div className="mb-12 text-center">
           <div className="mb-3 inline-block rounded-full border border-moss/40 bg-moss/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-moss">
-            AI-Powered · Real-Time · Role-Based
+            {t("landing.badge")}
           </div>
           <h1 className="font-display text-5xl font-bold uppercase tracking-tight text-navy md:text-6xl">
-            Report. Verify. Resolve.
+            {t("landing.heroTitle")}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            An intelligent civic issue reporting platform for citizens,
-            authorities and field workers — with AI image classification, GPS
-            triage and end-to-end resolution tracking.
+            {t("landing.heroSubtitle")}
           </p>
         </div>
 
         {!firebaseConfigured && (
           <div className="mx-auto mb-8 max-w-3xl rounded-lg border border-amber/40 bg-amber/10 px-4 py-3 font-mono text-xs text-navy">
-            <strong>DEMO MODE:</strong> Firebase env vars not set — running with
-            in-browser mock auth & storage. Add{" "}
-            <code>VITE_FIREBASE_*</code> vars and rebuild for real Firebase.
+            <strong>{t("landing.demoMode")}</strong> {t("landing.demoModeText")}
           </div>
         )}
 
         <div className="grid gap-6 md:grid-cols-3">
           <RoleCard
             emoji="👤"
-            title="Citizen"
-            tagline="Report & track civic issues"
+            title={t("roles.citizen")}
+            tagline={t("landing.citizenTagline")}
             role="citizen"
             accent="moss"
-            features={[
-              "Capture issue photo",
-              "AI auto-classification",
-              "Real-time status",
-              "Complaint history",
-            ]}
+            features={t("landing.citizenFeatures", { returnObjects: true }) as string[]}
           />
           <RoleCard
             emoji="🏛"
-            title="Authority"
-            tagline="Triage, assign, monitor"
+            title={t("roles.authority")}
+            tagline={t("landing.authorityTagline")}
             role="authority"
             accent="amber"
-            features={[
-              "Live complaint queue",
-              "Interactive ward map",
-              "AI priority routing",
-              "Analytics dashboard",
-            ]}
+            features={t("landing.authorityFeatures", { returnObjects: true }) as string[]}
           />
           <RoleCard
             emoji="👷"
-            title="Field Worker"
-            tagline="Resolve on the ground"
+            title={t("landing.workerTitle")}
+            tagline={t("landing.workerTagline")}
             role="worker"
             accent="navy"
-            features={[
-              "Assigned tasks feed",
-              "GPS navigation",
-              "Progress updates",
-              "Proof-of-completion",
-            ]}
+            features={t("landing.workerFeatures", { returnObjects: true }) as string[]}
           />
         </div>
 
         <div className="mt-16 grid gap-4 md:grid-cols-4">
           {[
-            { k: "Categories", v: "6", d: "AI-detected issue types" },
-            { k: "Statuses", v: "6", d: "FSM-tracked stages" },
-            { k: "Roles", v: "3", d: "With separate dashboards" },
-            { k: "Real-time", v: "∞", d: "Firestore listeners" },
+            { k: t("landing.statCategories"), v: "10", d: t("landing.statCategoriesDesc") },
+            { k: t("landing.statStatuses"), v: "6", d: t("landing.statStatusesDesc") },
+            { k: t("landing.statRoles"), v: "3", d: t("landing.statRolesDesc") },
+            { k: t("landing.statRealtime"), v: "∞", d: t("landing.statRealtimeDesc") },
           ].map((s) => (
             <div key={s.k} className="bento">
               <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -149,7 +126,7 @@ function Landing() {
       </main>
 
       <footer className="mt-16 border-t border-border bg-navy py-6 text-center font-mono text-[11px] uppercase tracking-widest text-cream/60">
-        CivicPulse AI · Built for civic transparency
+        {t("common.footer")}
       </footer>
     </div>
   );
@@ -170,6 +147,7 @@ function RoleCard({
   accent: "moss" | "amber" | "navy";
   features: string[];
 }) {
+  const { t } = useTranslation();
   const accentBg = {
     moss: "bg-moss",
     amber: "bg-amber",
@@ -181,11 +159,11 @@ function RoleCard({
       <div className="mb-4 flex items-start justify-between">
         <div className="text-4xl">{emoji}</div>
         <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          Terminal {role.slice(0, 3).toUpperCase()}
+          {t("common.terminal")} {role.slice(0, 3).toUpperCase()}
         </div>
       </div>
       <h2 className="font-display text-2xl font-bold uppercase text-navy">
-        {title} Login
+        {t("landing.loginCta", { role: title })}
       </h2>
       <p className="mt-1 text-sm text-muted-foreground">{tagline}</p>
       <ul className="my-5 flex-1 space-y-1.5 text-sm">
@@ -202,14 +180,14 @@ function RoleCard({
           params={{ role }}
           className={`flex-1 rounded-md ${accentBg} ${accentFg} px-4 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider transition-opacity hover:opacity-90`}
         >
-          Login
+          {t("common.login")}
         </Link>
         <Link
           to="/auth/$role/register"
           params={{ role }}
           className="flex-1 rounded-md border border-navy/30 px-4 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider text-navy transition-colors hover:bg-navy/5"
         >
-          Register
+          {t("common.register")}
         </Link>
       </div>
     </div>

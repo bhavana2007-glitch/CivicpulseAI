@@ -1,6 +1,8 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
+import { useLabels } from "@/lib/i18n/labels";
 import type { Role } from "@/lib/types";
 import { AuthShell, Field } from "./auth.$role.login";
 
@@ -13,6 +15,8 @@ export const Route = createFileRoute("/auth/$role/register")({
 function RegisterPage() {
   const { role } = Route.useParams();
   const nav = useNavigate();
+  const { t } = useTranslation();
+  const { role: roleName } = useLabels();
   const { register, firebaseReady } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,9 +27,9 @@ function RegisterPage() {
 
   if (!VALID.includes(role as Role)) {
     return (
-      <AuthShell title="Invalid role">
+      <AuthShell title={t("auth.invalidRole")}>
         <Link to="/" className="text-sm underline">
-          Return home
+          {t("auth.returnHome")}
         </Link>
       </AuthShell>
     );
@@ -39,12 +43,10 @@ function RegisterPage() {
     setBusy(true);
     try {
       await register(email, password, name, r);
-      setOk(
-        "Account created. Verification email sent — please verify before logging in.",
-      );
+      setOk(t("auth.accountCreated"));
       setTimeout(() => nav({ to: "/auth/$role/login", params: { role: r } }), 1500);
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Registration failed";
+      const msg = e instanceof Error ? e.message : t("auth.registrationFailed");
       if (msg.startsWith("MOCK_UNVERIFIED:")) {
         setOk(msg.replace("MOCK_UNVERIFIED:", ""));
         setTimeout(
@@ -58,21 +60,21 @@ function RegisterPage() {
   }
 
   return (
-    <AuthShell title={`${cap(r)} Registration`}>
+    <AuthShell title={t("auth.registerTitle", { role: roleName(r) })}>
       <div className="mb-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-        Terminal · {r.toUpperCase()} · New Account
+        {t("common.terminal")} · {roleName(r)} · {t("auth.newAccount")}
       </div>
       <form onSubmit={submit} className="space-y-4">
-        <Field label="Full Name" value={name} onChange={setName} required />
+        <Field label={t("auth.fullName")} value={name} onChange={setName} required />
         <Field
-          label="Email"
+          label={t("auth.email")}
           type="email"
           value={email}
           onChange={setEmail}
           required
         />
         <Field
-          label="Password (min 6 chars)"
+          label={t("auth.passwordHint")}
           type="password"
           value={password}
           onChange={setPassword}
@@ -92,7 +94,7 @@ function RegisterPage() {
           disabled={busy}
           className="w-full rounded-md bg-navy px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest text-cream hover:opacity-90 disabled:opacity-50"
         >
-          {busy ? "Creating…" : "Create Account"}
+          {busy ? t("auth.creating") : t("auth.createAccount")}
         </button>
       </form>
       <div className="mt-6 flex items-center justify-between text-xs">
@@ -101,21 +103,17 @@ function RegisterPage() {
           params={{ role: r }}
           className="text-navy underline"
         >
-          Have an account? Sign in
+          {t("auth.haveAccount")}
         </Link>
         <Link to="/" className="text-muted-foreground">
-          ← Home
+          {t("common.back")}
         </Link>
       </div>
       {!firebaseReady && (
         <p className="mt-4 rounded bg-amber/10 p-2 font-mono text-[10px] text-navy">
-          Demo mode — no Firebase config. Users stored locally in-browser.
+          {t("auth.demoRegister")}
         </p>
       )}
     </AuthShell>
   );
-}
-
-function cap(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
 }

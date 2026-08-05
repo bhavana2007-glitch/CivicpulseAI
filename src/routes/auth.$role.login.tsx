@@ -1,6 +1,9 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { useAuth } from "@/lib/auth-context";
+import { useLabels } from "@/lib/i18n/labels";
 import type { Role } from "@/lib/types";
 
 const VALID: Role[] = ["citizen", "authority", "worker"];
@@ -12,6 +15,8 @@ export const Route = createFileRoute("/auth/$role/login")({
 function LoginPage() {
   const { role } = Route.useParams();
   const nav = useNavigate();
+  const { t } = useTranslation();
+  const { role: roleName } = useLabels();
   const { login, resendVerification, firebaseReady } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,12 +26,12 @@ function LoginPage() {
 
   if (!VALID.includes(role as Role)) {
     return (
-      <AuthShell title="Invalid role">
+      <AuthShell title={t("auth.invalidRole")}>
         <p className="text-sm text-muted-foreground">
-          Unknown role: <code>{role}</code>
+          {t("auth.unknownRole")}: <code>{role}</code>
         </p>
         <Link to="/" className="mt-4 inline-block text-sm underline">
-          Return home
+          {t("auth.returnHome")}
         </Link>
       </AuthShell>
     );
@@ -42,7 +47,7 @@ function LoginPage() {
       await login(email, password, r);
       nav({ to: `/${r}` as "/citizen" | "/authority" | "/worker" });
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Login failed";
+      const msg = e instanceof Error ? e.message : t("auth.loginFailed");
       setErr(msg);
       if (msg.toLowerCase().includes("verify")) setNeedsVerify(true);
     } finally {
@@ -51,20 +56,20 @@ function LoginPage() {
   }
 
   return (
-    <AuthShell title={`${cap(r)} Login`}>
+    <AuthShell title={t("auth.loginTitle", { role: roleName(r) })}>
       <div className="mb-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-        Terminal · {r.toUpperCase()} · Secure Sign-In
+        {t("common.terminal")} · {roleName(r)} · {t("auth.secureSignIn")}
       </div>
       <form onSubmit={submit} className="space-y-4">
         <Field
-          label="Email"
+          label={t("auth.email")}
           type="email"
           value={email}
           onChange={setEmail}
           required
         />
         <Field
-          label="Password"
+          label={t("auth.password")}
           type="password"
           value={password}
           onChange={setPassword}
@@ -78,11 +83,11 @@ function LoginPage() {
                 type="button"
                 onClick={async () => {
                   await resendVerification();
-                  setErr("Verification email resent. Check your inbox.");
+                  setErr(t("auth.verificationResent"));
                 }}
                 className="ml-2 underline"
               >
-                Resend verification email
+                {t("auth.resendVerification")}
               </button>
             )}
           </div>
@@ -91,7 +96,7 @@ function LoginPage() {
           disabled={busy}
           className="w-full rounded-md bg-navy px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest text-cream transition-opacity hover:opacity-90 disabled:opacity-50"
         >
-          {busy ? "Signing in…" : "Sign In"}
+          {busy ? t("auth.signingIn") : t("common.signIn")}
         </button>
       </form>
       <div className="mt-6 flex items-center justify-between text-xs">
@@ -100,16 +105,15 @@ function LoginPage() {
           params={{ role: r }}
           className="text-navy underline"
         >
-          Create account
+          {t("auth.createAccountLink")}
         </Link>
         <Link to="/" className="text-muted-foreground">
-          ← Home
+          {t("common.back")}
         </Link>
       </div>
       {!firebaseReady && (
         <p className="mt-4 rounded bg-amber/10 p-2 font-mono text-[10px] text-navy">
-          Demo mode — no Firebase config. Register, then click "Resend
-          verification" to auto-verify.
+          {t("auth.demoLogin")}
         </p>
       )}
     </AuthShell>
@@ -123,15 +127,17 @@ export function AuthShell({
   title: string;
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen">
-      <header className="border-b border-navy/20 bg-navy px-6 py-4 text-cream">
+      <header className="flex items-center justify-between border-b border-navy/20 bg-navy px-6 py-4 text-cream">
         <Link
           to="/"
           className="font-display text-lg font-bold uppercase tracking-widest"
         >
-          ← CivicPulse
+          ← {t("common.appName")}
         </Link>
+        <LanguageSelector />
       </header>
       <div className="mx-auto flex max-w-md flex-col px-6 py-12">
         <div className="bento">
@@ -172,8 +178,4 @@ export function Field({
       />
     </label>
   );
-}
-
-function cap(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
 }
