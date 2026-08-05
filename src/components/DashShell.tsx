@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { NotificationBell } from "@/components/NotificationBell";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { useAuth } from "@/lib/auth-context";
+import { useLabels } from "@/lib/i18n/labels";
 import type { Role } from "@/lib/types";
 
 
@@ -13,9 +16,8 @@ export function DashShell({
   children: ReactNode;
 }) {
   const { profile, logout } = useAuth();
-  const roleLabel = { citizen: "CITIZEN", authority: "AUTHORITY", worker: "WORKER" }[
-    role
-  ];
+  const { t } = useTranslation();
+  const { role: roleName } = useLabels();
   const accent = {
     citizen: "bg-moss",
     authority: "bg-amber",
@@ -35,18 +37,19 @@ export function DashShell({
             </Link>
             <div>
               <div className="font-display text-sm font-bold uppercase tracking-widest">
-                CivicPulse
+                {t("common.appName")}
               </div>
               <div className="font-mono text-[9px] uppercase tracking-widest text-amber">
-                Terminal · {roleLabel}
+                {t("common.terminal")} · {roleName(role)}
               </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <LanguageSelector />
             <NotificationBell />
             <div className="hidden text-right md:block">
               <div className="font-mono text-[10px] uppercase tracking-widest text-cream/60">
-                {profile?.role}
+                {profile ? roleName(profile.role) : ""}
               </div>
               <div className="text-sm">{profile?.name ?? profile?.email}</div>
             </div>
@@ -60,7 +63,7 @@ export function DashShell({
               onClick={() => logout()}
               className="rounded border border-cream/30 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest hover:bg-cream/10"
             >
-              Sign out
+              {t("common.signOut")}
             </button>
           </div>
         </div>
