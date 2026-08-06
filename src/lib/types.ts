@@ -67,6 +67,12 @@ export interface Complaint {
   lng: number;
   address?: string;
   priority: Priority;
+  severity?: Severity;
+  /** Original AI prediction, kept even when the citizen overrides it. */
+  aiCategory?: Category;
+  aiConfidence?: number;
+  /** True when the citizen manually corrected the AI category. */
+  manualOverride?: boolean;
   status: ComplaintStatus;
   assignedWorkerId?: string;
   assignedWorkerName?: string;

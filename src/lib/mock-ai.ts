@@ -35,7 +35,9 @@ export async function analyzeImage(dataUrl: string): Promise<AIAnalysis> {
       priority: "medium" as Priority,
       department: DEPARTMENTS.Others,
       confidence: 0,
+      severity: "Medium" as const,
       isValid: true,
+      uncertain: true,
       source: "fallback",
       imageHash,
     };
