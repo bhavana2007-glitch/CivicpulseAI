@@ -1,4 +1,4 @@
-import type { Category, Priority } from "./types";
+import type { Category, Priority, Severity } from "./types";
 
 /** The ONLY categories the system accepts. */
 export const CATEGORIES: Category[] = [
@@ -11,6 +11,7 @@ export const CATEGORIES: Category[] = [
   "Power Outage",
   "Fallen Tree",
   "Road Damage",
+  "Illegal Dumping",
   "Others",
 ];
 
@@ -24,6 +25,7 @@ export const DEPARTMENTS: Record<Category, string> = {
   "Power Outage": "Electrical",
   "Fallen Tree": "Garden / Disaster Cell",
   "Road Damage": "Public Works",
+  "Illegal Dumping": "Sanitation",
   Others: "General Grievance",
 };
 
@@ -51,4 +53,17 @@ export function normalizeConfidence(raw: unknown): number {
   return Math.max(0, Math.min(1, v));
 }
 
-export const CONFIDENCE_THRESHOLD = 0.7;
+export const CONFIDENCE_THRESHOLD = 0.6;
+
+const SEVERITIES: Severity[] = ["Low", "Medium", "High"];
+
+export function normalizeSeverity(raw: unknown): Severity {
+  if (typeof raw !== "string") return "Medium";
+  const v = raw.trim().toLowerCase();
+  return SEVERITIES.find((s) => s.toLowerCase() === v) ?? "Medium";
+}
+
+/** Map severity to the internal priority scale. */
+export function severityToPriority(s: Severity): Priority {
+  return s === "High" ? "high" : s === "Low" ? "low" : "medium";
+}

@@ -8,7 +8,8 @@ import {
   normalizeConfidence,
   normalizePriority,
 } from "./categories";
-import type { Category, Priority } from "./types";
+import { normalizeSeverity, severityToPriority } from "./categories";
+import type { Category, Priority, Severity } from "./types";
 
 const Input = z.object({ imageDataUrl: z.string().min(16) });
 
@@ -18,39 +19,55 @@ export interface ClassificationResult {
   priority: Priority;
   department: string;
   confidence: number;
+  severity: Severity;
   isValid: boolean;
+  /** True when confidence is below the threshold and the user must confirm. */
+  uncertain: boolean;
   source: "ai" | "fallback";
   /** Populated only when classification failed. */
   error?: string;
 }
 
-const SYSTEM_PROMPT = `You are an AI-powered civic issue classifier.
-Analyze the uploaded image carefully.
-Choose EXACTLY ONE category from the following list:
+const SYSTEM_PROMPT = `You are an expert municipal civic-issue image classifier.
+You MUST classify the image into EXACTLY ONE of these categories:
 ${CATEGORIES.map((c) => `- ${c}`).join("\n")}
 
-Never invent new categories. Never guess unrelated issues.
-If the image contains multiple issues, choose the MOST SEVERE civic issue.
-If confidence is below 70%, return "Others".
+MANDATORY PROCEDURE — follow it every time:
+1. Describe to yourself what physical objects and surfaces are visible.
+2. Compare the image against EVERY category in the list above, one by one.
+3. Pick the single best match. Only if NO category matches with at least 60%
+   confidence may you answer "Others".
 
-Classification examples:
-- Flooded street / standing water on road -> Water Logging
-- Large pothole / hole in road surface -> Pothole
-- Overflowing garbage bin / trash pile -> Garbage Overflow
-- Broken, damaged or unlit streetlight pole -> Broken Streetlight
-- Water leaking or spraying from a pipeline -> Water Leak
-- Blocked, clogged or open drain / manhole -> Drainage Issue
-- Tree fallen across a road or footpath -> Fallen Tree
-- Cracked, broken or eroded road surface (no distinct hole) -> Road Damage
-- Downed power line / dark area / damaged transformer -> Power Outage
-- Anything not clearly matching the list -> Others
+Category definitions (be decisive, these are common and obvious):
+- Pothole: any hole, cavity, crater or broken patch in a road/street surface,
+  including water-filled potholes. A visible hole in asphalt is ALWAYS "Pothole",
+  never "Others".
+- Road Damage: cracked, crumbling, eroded, subsided or broken road/footpath
+  surface WITHOUT a distinct hole (alligator cracks, uneven patches).
+- Water Logging: standing/stagnant water flooding a road, street or public area.
+  A flooded or submerged road is ALWAYS "Water Logging", never "Others".
+- Water Leak: water spraying, gushing or dripping from a pipe, tap, valve or
+  main; wet patch traced to a pipeline.
+- Drainage Issue: blocked/clogged/overflowing drain, open or missing manhole,
+  sewage on the street.
+- Garbage Overflow: overflowing bin, dumpster or heaped trash at a collection point.
+- Illegal Dumping: waste, debris, construction rubble or trash dumped in an
+  unauthorised place with no bin present.
+- Broken Streetlight: damaged, leaning, unlit or vandalised street light pole/fixture.
+- Power Outage: downed power line, damaged transformer/pole, dark neighbourhood.
+- Fallen Tree: tree or large branch fallen onto a road, footpath or property.
+- Others: ONLY when nothing above matches with >= 60% confidence.
 
-priority must be one of: low, medium, high, critical (based on public safety risk).
-description must be 1-2 factual sentences about what is visible and the action needed.
-confidence is a number from 0 to 100.
+Never invent categories. If multiple issues appear, pick the MOST SEVERE one.
+
+Return fields:
+- category: exactly one string from the list.
+- confidence: integer 0-100, your true confidence in the chosen category.
+- severity: "Low", "Medium" or "High" based on public-safety risk.
+- description: 1-2 factual sentences describing what is visible and the action needed.
 
 Return ONLY valid JSON, no markdown fences:
-{"category":"","confidence":0,"priority":"","description":""}`;
+{"category":"","confidence":0,"severity":"","description":""}`;
 
 function parseJson(text: string): Record<string, unknown> {
   const cleaned = text
@@ -84,7 +101,9 @@ export const classifyImage = createServerFn({ method: "POST" })
       priority: "medium",
       department: DEPARTMENTS.Others,
       confidence: 0,
+      severity: "Medium",
       isValid: true,
+      uncertain: true,
       source: "fallback",
     };
     if (!key) return { ...fallback, error: "missing LOVABLE_API_KEY" };
@@ -131,9 +150,10 @@ export const classifyImage = createServerFn({ method: "POST" })
 
       const raw = parseJson(text);
       const confidence = normalizeConfidence(raw["confidence"]);
-      let category = normalizeCategory(raw["category"]);
-      // Confidence-based validation: below threshold -> Others.
-      if (confidence < CONFIDENCE_THRESHOLD) category = "Others";
+      const category = normalizeCategory(raw["category"]);
+      const severity = normalizeSeverity(raw["severity"]);
+      // Below the threshold we keep the AI guess but flag it for manual confirmation.
+      const uncertain = confidence < CONFIDENCE_THRESHOLD;
 
       const description =
         typeof raw["description"] === "string" && raw["description"].trim()
@@ -143,10 +163,14 @@ export const classifyImage = createServerFn({ method: "POST" })
       return {
         category,
         description,
-        priority: normalizePriority(raw["priority"]),
+        priority: raw["priority"]
+          ? normalizePriority(raw["priority"])
+          : severityToPriority(severity),
         department: DEPARTMENTS[category],
         confidence,
+        severity,
         isValid: true,
+        uncertain,
         source: "ai",
       };
     } catch (err) {
