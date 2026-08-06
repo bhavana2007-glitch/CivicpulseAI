@@ -14,7 +14,7 @@ export const CATEGORIES: Category[] = [
   "Illegal Dumping",
 ];
 
-export const DEPARTMENTS: Record<Category, string> = {
+export const DEPARTMENTS: Partial<Record<Category, string>> & Record<(typeof CATEGORIES)[number], string> = {
   Pothole: "Public Works",
   "Water Logging": "Storm Water / Drainage",
   "Water Leak": "Water Supply",
@@ -26,6 +26,12 @@ export const DEPARTMENTS: Record<Category, string> = {
   "Road Damage": "Public Works",
   "Illegal Dumping": "Sanitation",
 };
+
+/** Safe department lookup — never returns undefined. */
+export function departmentFor(category: Category): string {
+  return DEPARTMENTS[category] ?? "General Administration";
+}
+
 
 const PRIORITIES: Priority[] = [
   "low",
