@@ -9,40 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccessDeniedRouteImport } from './routes/access-denied'
-import { Route as AuthorityRouteImport } from './routes/authority'
-import { Route as CitizenRouteImport } from './routes/citizen'
-import { Route as FeedRouteImport } from './routes/feed'
-import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as WorkerRouteImport } from './routes/worker'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as FeedRouteImport } from './routes/feed'
+import { Route as CitizenRouteImport } from './routes/citizen'
+import { Route as AuthorityRouteImport } from './routes/authority'
+import { Route as AccessDeniedRouteImport } from './routes/access-denied'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackIdRouteImport } from './routes/track.$id'
-import { Route as AuthRoleLoginRouteImport } from './routes/auth.$role.login'
 import { Route as AuthRoleRegisterRouteImport } from './routes/auth.$role.register'
+import { Route as AuthRoleLoginRouteImport } from './routes/auth.$role.login'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccessDeniedRoute = AccessDeniedRouteImport.update({
-  id: '/access-denied',
-  path: '/access-denied',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthorityRoute = AuthorityRouteImport.update({
-  id: '/authority',
-  path: '/authority',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CitizenRoute = CitizenRouteImport.update({
-  id: '/citizen',
-  path: '/citizen',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeedRoute = FeedRouteImport.update({
-  id: '/feed',
-  path: '/feed',
+const WorkerRoute = WorkerRouteImport.update({
+  id: '/worker',
+  path: '/worker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
@@ -50,9 +30,29 @@ const VerifyEmailRoute = VerifyEmailRouteImport.update({
   path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WorkerRoute = WorkerRouteImport.update({
-  id: '/worker',
-  path: '/worker',
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CitizenRoute = CitizenRouteImport.update({
+  id: '/citizen',
+  path: '/citizen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthorityRoute = AuthorityRouteImport.update({
+  id: '/authority',
+  path: '/authority',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessDeniedRoute = AccessDeniedRouteImport.update({
+  id: '/access-denied',
+  path: '/access-denied',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrackIdRoute = TrackIdRouteImport.update({
@@ -60,14 +60,14 @@ const TrackIdRoute = TrackIdRouteImport.update({
   path: '/track/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoleLoginRoute = AuthRoleLoginRouteImport.update({
-  id: '/auth/$role/login',
-  path: '/auth/$role/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoleRegisterRoute = AuthRoleRegisterRouteImport.update({
   id: '/auth/$role/register',
   path: '/auth/$role/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoleLoginRoute = AuthRoleLoginRouteImport.update({
+  id: '/auth/$role/login',
+  path: '/auth/$role/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -162,39 +162,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/access-denied': {
-      id: '/access-denied'
-      path: '/access-denied'
-      fullPath: '/access-denied'
-      preLoaderRoute: typeof AccessDeniedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/authority': {
-      id: '/authority'
-      path: '/authority'
-      fullPath: '/authority'
-      preLoaderRoute: typeof AuthorityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/citizen': {
-      id: '/citizen'
-      path: '/citizen'
-      fullPath: '/citizen'
-      preLoaderRoute: typeof CitizenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/feed': {
-      id: '/feed'
-      path: '/feed'
-      fullPath: '/feed'
-      preLoaderRoute: typeof FeedRouteImport
+    '/worker': {
+      id: '/worker'
+      path: '/worker'
+      fullPath: '/worker'
+      preLoaderRoute: typeof WorkerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-email': {
@@ -204,11 +176,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/worker': {
-      id: '/worker'
-      path: '/worker'
-      fullPath: '/worker'
-      preLoaderRoute: typeof WorkerRouteImport
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/citizen': {
+      id: '/citizen'
+      path: '/citizen'
+      fullPath: '/citizen'
+      preLoaderRoute: typeof CitizenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/authority': {
+      id: '/authority'
+      path: '/authority'
+      fullPath: '/authority'
+      preLoaderRoute: typeof AuthorityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/access-denied': {
+      id: '/access-denied'
+      path: '/access-denied'
+      fullPath: '/access-denied'
+      preLoaderRoute: typeof AccessDeniedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/track/$id': {
@@ -218,18 +218,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/$role/login': {
-      id: '/auth/$role/login'
-      path: '/auth/$role/login'
-      fullPath: '/auth/$role/login'
-      preLoaderRoute: typeof AuthRoleLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth/$role/register': {
       id: '/auth/$role/register'
       path: '/auth/$role/register'
       fullPath: '/auth/$role/register'
       preLoaderRoute: typeof AuthRoleRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/$role/login': {
+      id: '/auth/$role/login'
+      path: '/auth/$role/login'
+      fullPath: '/auth/$role/login'
+      preLoaderRoute: typeof AuthRoleLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
