@@ -12,7 +12,8 @@ import {
 } from "@/lib/complaints";
 import { useLabels } from "@/lib/i18n/labels";
 import { analyzeImage, findDuplicate, type AIAnalysis } from "@/lib/mock-ai";
-import type { Complaint } from "@/lib/types";
+import { CATEGORIES, DEPARTMENTS } from "@/lib/categories";
+import type { Category, Complaint } from "@/lib/types";
 
 export const Route = createFileRoute("/citizen")({
   component: () => (

@@ -49,7 +49,8 @@
     "power_outage": "Power Outage",
     "fallen_tree": "Fallen Tree",
     "road_damage": "Road Damage",
-    "others": "Others"
+    "others": "Others",
+    "illegal_dumping": "Illegal Dumping"
   },
   "roles": {
     "citizen": "Citizen",
@@ -161,7 +162,10 @@
     "submitted": "✓ Submitted & verified.",
     "submit": "Submit Complaint",
     "submitting": "Submitting…",
-    "proof": "✓ Proof of completion"
+    "proof": "✓ Proof of completion",
+    "severity": "Severity",
+    "uncertain": "Classification uncertain. Please choose the correct category.",
+    "chooseCategory": "Select a category…"
   },
   "authority": {
     "title": "Authority Command",
