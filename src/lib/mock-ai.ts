@@ -1,5 +1,5 @@
 import type { Complaint, Priority } from "./types";
-import { DEPARTMENTS } from "./categories";
+import { departmentFor } from "./categories";
 import { classifyImage } from "./classify.functions";
 import type { ClassificationResult } from "./classify.functions";
 
@@ -29,11 +29,11 @@ export async function analyzeImage(dataUrl: string): Promise<AIAnalysis> {
   } catch (err) {
     console.error("analyzeImage failed", err);
     return {
-      category: "Others",
+      category: "Road Damage",
       description:
-        "Civic issue reported. Automatic classification was unavailable, requires manual municipal review.",
+        "Civic issue reported. Automatic classification was unavailable, requires manual selection and municipal review.",
       priority: "medium" as Priority,
-      department: DEPARTMENTS.Others,
+      department: departmentFor("Road Damage"),
       confidence: 0,
       severity: "Medium" as const,
       isValid: true,

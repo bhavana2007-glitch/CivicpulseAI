@@ -12,7 +12,7 @@ import {
 } from "@/lib/complaints";
 import { useLabels } from "@/lib/i18n/labels";
 import { analyzeImage, findDuplicate, type AIAnalysis } from "@/lib/mock-ai";
-import { CATEGORIES, DEPARTMENTS } from "@/lib/categories";
+import { CATEGORIES, departmentFor } from "@/lib/categories";
 import type { Category, Complaint } from "@/lib/types";
 
 export const Route = createFileRoute("/citizen")({
@@ -212,7 +212,7 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
       lng: coords.lng,
       priority: ai.priority,
       severity: ai.severity,
-      department: DEPARTMENTS[finalCategory],
+      department: departmentFor(finalCategory),
       aiCategory: ai.category,
       aiConfidence: ai.confidence,
       manualOverride: finalCategory !== ai.category,
