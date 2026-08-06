@@ -14,7 +14,7 @@ export const CATEGORIES: Category[] = [
   "Illegal Dumping",
 ];
 
-export const DEPARTMENTS: Partial<Record<Category, string>> & Record<(typeof CATEGORIES)[number], string> = {
+export const DEPARTMENTS: Partial<Record<Category, string>> = {
   Pothole: "Public Works",
   "Water Logging": "Storm Water / Drainage",
   "Water Leak": "Water Supply",
