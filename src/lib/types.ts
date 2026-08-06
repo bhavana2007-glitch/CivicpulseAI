@@ -40,7 +40,10 @@ export type Category =
   | "Power Outage"
   | "Fallen Tree"
   | "Road Damage"
+  | "Illegal Dumping"
   | "Others";
+
+export type Severity = "Low" | "Medium" | "High";
 
 export type Priority = "low" | "medium" | "high" | "critical";
 
