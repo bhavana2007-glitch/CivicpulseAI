@@ -139,6 +139,9 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [dup, setDup] = useState<Complaint | null>(null);
+  const [manualCategory, setManualCategory] = useState<Category | "">("");
+
+  const finalCategory: Category | null = manualCategory || ai?.category || null;
 
   function detectGPS() {
     setStatus(t("citizen.detectingGps"));
@@ -169,6 +172,7 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
       const url = reader.result as string;
       setImageData(url);
       setAi(null);
+      setManualCategory("");
       setDup(null);
       setAnalyzing(true);
       const result = await analyzeImage(url);
@@ -187,7 +191,9 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
   }, [ai, coords, existing]);
 
   async function submit() {
-    if (!user || !profile || !ai || !coords || !imageData) return;
+    if (!user || !profile || !ai || !coords || !imageData || !finalCategory)
+      return;
+    if (ai.uncertain && !manualCategory) return;
     setSubmitting(true);
     setStatus(t("citizen.uploading"));
     const imageUrl = await uploadImage(
@@ -198,17 +204,22 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
     await createComplaint({
       citizenId: user.uid,
       citizenName: profile.name,
-      category: ai.category,
+      category: finalCategory,
       description: ai.description,
       imageUrl,
       lat: coords.lat,
       lng: coords.lng,
       priority: ai.priority,
-      department: ai.department,
+      severity: ai.severity,
+      department: DEPARTMENTS[finalCategory],
+      aiCategory: ai.category,
+      aiConfidence: ai.confidence,
+      manualOverride: finalCategory !== ai.category,
     });
     setStatus(t("citizen.submitted"));
     setImageData(null);
     setAi(null);
+    setManualCategory("");
     setCoords(null);
     setDup(null);
     setSubmitting(false);
@@ -279,10 +290,23 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
             </div>
           )}
           {ai && !analyzing && (
-            <div className="space-y-2 rounded-lg border border-moss/40 bg-moss/5 p-3">
+            <div
+              className={`space-y-2 rounded-lg border p-3 ${
+                ai.uncertain
+                  ? "border-amber/50 bg-amber/10"
+                  : "border-moss/40 bg-moss/5"
+              }`}
+            >
+              {imageData && (
+                <img
+                  src={imageData}
+                  alt="Uploaded civic issue preview"
+                  className="h-28 w-full rounded object-cover"
+                />
+              )}
               <div className="flex items-center justify-between">
                 <span className="font-display font-bold text-navy">
-                  {categoryLabel(ai.category)}
+                  {categoryLabel(finalCategory ?? ai.category)}
                 </span>
                 <span className="font-mono text-[10px] uppercase text-moss">
                   {t("citizen.confidence", {
@@ -300,10 +324,37 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
                 <span className="rounded bg-amber/20 px-2 py-0.5">
                   {t("common.priorityLabel")}: {priorityLabel(ai.priority)}
                 </span>
-                <span className="rounded bg-moss/20 px-2 py-0.5 text-moss">
-                  {t("citizen.valid")}
+                <span className="rounded bg-navy/10 px-2 py-0.5">
+                  {t("citizen.severity")}: {ai.severity}
                 </span>
+                {!ai.uncertain && (
+                  <span className="rounded bg-moss/20 px-2 py-0.5 text-moss">
+                    {t("citizen.valid")}
+                  </span>
+                )}
               </div>
+
+              {ai.uncertain && (
+                <div className="space-y-2 rounded border border-amber/50 bg-background/60 p-2">
+                  <p className="text-xs font-semibold text-navy">
+                    {t("citizen.uncertain")}
+                  </p>
+                  <select
+                    value={manualCategory}
+                    onChange={(e) =>
+                      setManualCategory(e.target.value as Category | "")
+                    }
+                    className="w-full rounded border border-input bg-background px-2 py-1.5 font-mono text-[11px] uppercase"
+                  >
+                    <option value="">{t("citizen.chooseCategory")}</option>
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c}>
+                        {categoryLabel(c)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               {dup && (
                 <div className="rounded border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">
                   {t("citizen.duplicate", {
@@ -323,7 +374,9 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
         )}
 
         <button
-          disabled={!ai || !coords || submitting}
+          disabled={
+            !ai || !coords || submitting || (ai.uncertain && !manualCategory)
+          }
           onClick={submit}
           className="w-full rounded-md bg-moss px-4 py-3 font-mono text-xs font-semibold uppercase tracking-widest text-cream hover:opacity-90 disabled:opacity-40"
         >
