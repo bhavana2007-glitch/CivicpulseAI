@@ -33,12 +33,38 @@ const PRIORITIES: Priority[] = ["low", "medium", "high", "critical"];
 
 /** Strict validation: anything outside the approved list becomes "Others". */
 export function normalizeCategory(raw: unknown): Category {
-  if (typeof raw !== "string") return "Others";
-  const v = raw.trim().toLowerCase();
-  const exact = CATEGORIES.find((c) => c.toLowerCase() === v);
-  return exact ?? "Others";
-}
+  if (typeof raw !== "string") return "Pothole";
 
+  const v = raw.trim().toLowerCase();
+
+  const aliases: Record<string, Category> = {
+    "pothole": "Pothole",
+    "road damage": "Road Damage",
+    "water logging": "Water Logging",
+    "water leak": "Water Leak",
+    "water leakage": "Water Leak",
+    "drainage issue": "Drainage Issue",
+    "garbage overflow": "Garbage Overflow",
+    "illegal dumping": "Illegal Dumping",
+    "broken streetlight": "Broken Streetlight",
+    "broken street light": "Broken Streetlight",
+    "power outage": "Power Outage",
+    "fallen tree": "Fallen Tree",
+  };
+
+  if (aliases[v]) {
+    return aliases[v];
+  }
+
+  // Match if AI gives extra explanation
+  for (const key in aliases) {
+    if (v.includes(key)) {
+      return aliases[key];
+    }
+  }
+
+  return "Others";
+}
 export function normalizePriority(raw: unknown): Priority {
   if (typeof raw !== "string") return "medium";
   const v = raw.trim().toLowerCase() as Priority;
