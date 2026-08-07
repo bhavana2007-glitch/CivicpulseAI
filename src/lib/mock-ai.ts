@@ -1,5 +1,4 @@
-import type { Complaint, Priority } from "./types";
-import { departmentFor } from "./categories";
+import type { Complaint } from "./types";
 import { classifyImage } from "./classify.functions";
 import type { ClassificationResult } from "./classify.functions";
 
@@ -29,16 +28,18 @@ export async function analyzeImage(dataUrl: string): Promise<AIAnalysis> {
   } catch (err) {
     console.error("analyzeImage failed", err);
     return {
-      category: "Road Damage",
+      category: null,
       description:
-        "Civic issue reported. Automatic classification was unavailable, requires manual selection and municipal review.",
-      priority: "medium" as Priority,
-      department: departmentFor("Road Damage"),
+        "Automatic classification failed. Select the correct category manually.",
+      priority: "medium",
+      department: "General Administration",
       confidence: 0,
       severity: "Medium" as const,
-      isValid: true,
+      isValid: false,
       uncertain: true,
       source: "fallback",
+      provider: "none",
+      error: err instanceof Error ? err.message : String(err),
       imageHash,
     };
   }

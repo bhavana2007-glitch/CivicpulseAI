@@ -44,9 +44,9 @@ const PRIORITIES: Priority[] = [
  * Converts AI output into one of the approved categories.
  * Handles small variations in Gemini responses.
  */
-export function normalizeCategory(raw: unknown): Category {
+export function normalizeCategory(raw: unknown): Category | null {
   if (typeof raw !== "string") {
-    return "Road Damage";
+    return null;
   }
 
   const value = raw
@@ -99,15 +99,7 @@ export function normalizeCategory(raw: unknown): Category {
     return aliases[value];
   }
 
-  // Partial match for AI explanations
-  for (const key in aliases) {
-    if (value.includes(key)) {
-      return aliases[key];
-    }
-  }
-
-  // Never return Others
-  return "Road Damage";
+  return null;
 }
 
 

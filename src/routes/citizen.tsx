@@ -213,7 +213,7 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
       priority: ai.priority,
       severity: ai.severity,
       department: departmentFor(finalCategory),
-      aiCategory: ai.category,
+      aiCategory: ai.category ?? undefined,
       aiConfidence: ai.confidence,
       manualOverride: finalCategory !== ai.category,
     });
@@ -307,7 +307,9 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
               )}
               <div className="flex items-center justify-between">
                 <span className="font-display font-bold text-navy">
-                  {categoryLabel(finalCategory ?? ai.category)}
+                  {finalCategory
+                    ? categoryLabel(finalCategory)
+                    : t("citizen.classificationFailed")}
                 </span>
                 <span className="font-mono text-[10px] uppercase text-moss">
                   {t("citizen.confidence", {
@@ -318,6 +320,11 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
               <div className="text-xs text-muted-foreground">
                 {ai.description}
               </div>
+              {ai.error && (
+                <div className="rounded border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">
+                  {t("citizen.classificationError", { reason: ai.error })}
+                </div>
+              )}
               <div className="flex flex-wrap gap-1.5 font-mono text-[10px] uppercase">
                 <span className="rounded bg-navy/10 px-2 py-0.5">
                   {t("common.department")}: {ai.department}
