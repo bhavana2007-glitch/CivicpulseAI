@@ -38,7 +38,7 @@ export interface ClassificationResult {
 }
 
 
-const SYSTEM_PROMPT = `
+const SYSTEM_PROMPT = ` 
 You are an expert municipal civic issue image classifier.
 
 Classify the image into EXACTLY ONE category.
@@ -106,7 +106,7 @@ Low, Medium or High.
 
 description:
 One or two factual sentences describing the visible issue and required action.
-`;
+';
 function parseJson(text: string): Record<string, unknown> {
   const cleaned = text
     .trim()
@@ -286,7 +286,8 @@ export const classifyImage = createServerFn({
 
     const uncertain =
       confidence < CONFIDENCE_THRESHOLD;
-      return {
+
+      return{
       category,
       description,
       priority,
