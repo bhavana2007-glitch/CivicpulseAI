@@ -106,13 +106,13 @@ Low, Medium or High.
 
 description:
 One or two factual sentences describing the visible issue and required action.
-';
+`;
 function parseJson(text: string): Record<string, unknown> {
   const cleaned = text
     .trim()
-    .replace(/^```json/i, "")
-    .replace(/^```/i, "")
-    .replace(/```$/i, "")
+    .replace(/^`json/i, "")
+    .replace(/^`/i, "")
+    .replace(/\`\`\`$/i, "")
     .trim();
 
   try {
