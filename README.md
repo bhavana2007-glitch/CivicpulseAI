@@ -15,7 +15,7 @@
 
 ### 🌐 Live Website
 
-### https://civicpulse-ai-path.vercel.app/
+### https://civicpulse-1bmka47gd-sbhavanaselvam-6655s-projects.vercel.app/citizen
 
 *"Building smarter cities through AI-powered civic engagement."*
 
@@ -234,19 +234,16 @@ npm run dev
 
 * Backend Development
   
-### 👨 SANJAY 
+### 👩 JEEVARAGAVI 
 
 * Firebase Integration
-  
-### 👨 LIWIN
-
 *  Database Management
 
 ---
 
 # 🌐 Live Demo
 
-🔗 https://civicpulse-ai-path.vercel.app/
+🔗 https://civicpulse-1bmka47gd-sbhavanaselvam-6655s-projects.vercel.app/citizen
 
 ---
 
