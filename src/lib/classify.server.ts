@@ -9,7 +9,7 @@ import {
 } from "./categories";
 import type { ClassificationResult } from "./classify.functions";
 
-const MODEL = "gemini-2.5-pro";
+const MODEL = "gemini-2.5-flash";
 const TIMEOUT_MS = 45_000;
 
 const SYSTEM_PROMPT = `You are a municipal infrastructure image analyst. Inspect the actual pixels carefully before deciding.
