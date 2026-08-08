@@ -15,7 +15,7 @@
 
 ### 🌐 Live Website
 
-### https://civicpulse-1bmka47gd-sbhavanaselvam-6655s-projects.vercel.app/citizen
+### https://civicpulse-ai-j7ls-6zu6587i6-sbhavanaselvam-6655s-projects.vercel.app/
 
 *"Building smarter cities through AI-powered civic engagement."*
 
@@ -243,7 +243,7 @@ npm run dev
 
 # 🌐 Live Demo
 
-🔗 https://civicpulse-1bmka47gd-sbhavanaselvam-6655s-projects.vercel.app/citizen
+🔗 https://civicpulse-ai-j7ls-6zu6587i6-sbhavanaselvam-6655s-projects.vercel.app/
 
 ---
 
