@@ -220,11 +220,11 @@ npm run dev
 
 # 👩‍💻 Team
 
-### 👩 Bhavana
+### 👩 Jeevaragavi
 
 * Frontend Development
 
-### 👩 JAISHREE
+### 👩 Jaishree
 
 * UI/UX Design
 * AI Integration
@@ -233,7 +233,7 @@ npm run dev
 
 * Backend Development
   
-### 👩 JEEVARAGAVI 
+### 👩 Bhavana
 
 * Firebase Integration
 *  Database Management
