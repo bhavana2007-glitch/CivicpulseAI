@@ -8,7 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import {
   createComplaint,
   subscribeComplaints,
-  uploadImage,
+  uploadImage,uploadVoice
 } from "@/lib/complaints";
 import { useLabels } from "@/lib/i18n/labels";
 import { analyzeImage, findDuplicate, type AIAnalysis } from "@/lib/mock-ai";
