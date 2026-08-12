@@ -12,7 +12,7 @@ import {
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { ref, uploadString,uploadBytes,getDownloadURL } from "firebase/storage";
 import { db, storage, firebaseConfigured } from "./firebase";
 import { notifyComplaintEvent } from "./notifications";
 import type {
