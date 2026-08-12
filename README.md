@@ -15,7 +15,7 @@
 
 ### 🌐 Live Website
 
-### https://civicpulse-ai-j7ls.vercel.app/
+### https://civicpulse-ai-sw9k.vercel.app/citizen
 *"Building smarter cities through AI-powered civic engagement."*
 
 </div>
@@ -242,7 +242,7 @@ npm run dev
 
 # 🌐 Live Demo
 
-🔗 https://civicpulse-ai-j7ls.vercel.app/
+🔗https://civicpulse-ai-sw9k.vercel.app/citizen
 
 ---
 
