@@ -138,6 +138,48 @@ const [isRecording, setIsRecording] = useState(false);
 const [voiceBlob, setVoiceBlob] = useState<Blob | null>(null);
 const [voiceUrl, setVoiceUrl] = useState<string | null>(null);
 const [recordingTime, setRecordingTime] = useState(0);
+  async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+    });
+
+    const recorder = new MediaRecorder(stream);
+
+    mediaRecorderRef.current = recorder;
+    audioChunksRef.current = [];
+
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    };
+
+    recorder.onstop = () => {
+      const blob = new Blob(audioChunksRef.current, {
+        type: recorder.mimeType || "audio/webm",
+      });
+
+      const url = URL.createObjectURL(blob);
+
+      setVoiceBlob(blob);
+      setVoiceUrl(url);
+
+      stream.getTracks().forEach((track) => track.stop());
+    };
+
+    recorder.start();
+
+    setIsRecording(true);
+    setRecordingTime(0);
+  } catch (error) {
+    console.error("Microphone error:", error);
+
+    setStatus(
+      "Please allow microphone access to record your complaint.",
+    );
+  }
+}
   const [imageData, setImageData] = useState<string | null>(null);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
     null,
