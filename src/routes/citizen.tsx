@@ -131,6 +131,13 @@ function ReportForm({ existing }: { existing: Complaint[] }) {
   const { category: categoryLabel, priority: priorityLabel, status: statusLabel } =
     useLabels();
   const fileRef = useRef<HTMLInputElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+const audioChunksRef = useRef<Blob[]>([]);
+
+const [isRecording, setIsRecording] = useState(false);
+const [voiceBlob, setVoiceBlob] = useState<Blob | null>(null);
+const [voiceUrl, setVoiceUrl] = useState<string | null>(null);
+const [recordingTime, setRecordingTime] = useState(0);
   const [imageData, setImageData] = useState<string | null>(null);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
     null,
