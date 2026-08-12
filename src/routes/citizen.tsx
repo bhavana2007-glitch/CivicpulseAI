@@ -154,6 +154,16 @@ const [recordingTime, setRecordingTime] = useState(0);
         audioChunksRef.current.push(event.data);
       }
     };
+    function stopRecording() {
+  if (
+    mediaRecorderRef.current &&
+    mediaRecorderRef.current.state !== "inactive"
+  ) {
+    mediaRecorderRef.current.stop();
+  }
+
+  setIsRecording(false);
+}
 
     recorder.onstop = () => {
       const blob = new Blob(audioChunksRef.current, {
