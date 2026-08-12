@@ -94,6 +94,20 @@ export async function uploadImage(
   await uploadString(r, dataUrl, "data_url");
   return getDownloadURL(r);
 }
+export async function uploadVoice(
+  path: string,
+  blob: Blob,
+): Promise<string> {
+  if (!firebaseConfigured) {
+    return URL.createObjectURL(blob);
+  }
+
+  const storageRef = ref(storage, path);
+
+  await uploadBytes(storageRef, blob);
+
+  return getDownloadURL(storageRef);
+}
 
 export function subscribeComplaints(
   cb: (list: Complaint[]) => void,
