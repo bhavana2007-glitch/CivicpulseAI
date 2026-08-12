@@ -62,7 +62,9 @@ export interface Complaint {
   category: Category;
   description: string;
   imageUrl?: string;
-  lat: number;
+  voiceUrl?: string;
+  voiceTranscript?: string;
+   lat: number;
   lng: number;
   address?: string;
   priority: Priority;
